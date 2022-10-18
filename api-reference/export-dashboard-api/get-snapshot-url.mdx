@@ -1,0 +1,65 @@
+---
+title: "Get PDF/Image Snapshot URL"
+sidebarTitle: "Get Snapshot URL"
+api: "GET /export/dashboard/(pdf|image)/"
+---
+
+This endpoint returns a URL to a PDF or image snapshot of a dashboard for a given user group. Use `/pdf` for a PDF and `/image` for an image.
+
+### Body
+
+<ParamField body="user_group_token" type="string">
+  This is the ID you use to identify a user group in your database.
+</ParamField>
+
+<ParamField body="dashboard_embed_id" type="string">
+  The dashboard ID retrieved form the "Embed" menu on the Explo home page.
+</ParamField>
+
+<ParamField body="version_number" type="number">
+  The version of the dashboard you want to fetch. If empty, the most recent
+  version will be used.
+</ParamField>
+
+<ParamField body="width" type="number">
+  Width in pixels of snapshot (only applies to Image, not PDF). Default width of
+  the image is 2000px
+</ParamField>
+
+<ParamField body="variable_query" type="string">
+  A string of query parameters to be passed to your dashboard (e.g.
+  "?dropdown-2=5")
+</ParamField>
+
+### Response
+
+<ResponseField name="success" type="number">
+  Indicates whether the call was successful. 1 if successful, 0 if not.
+</ResponseField>
+
+<ResponseField name="screenshot_url" type="string">
+  URL for the generated export file
+</ResponseField>
+
+<RequestExample>
+
+```bash Example Request
+curl --location --request POST 'https://api.explo.co/export/dashboard/pdf/' \
+--data-raw '{
+    "user_group_token": "<user group token>",
+    "dashboard_embed_id": "<dashboard embed ID>"
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": 1,
+  "screenshot_url": "https://explo-dashboard-screenshots.s3-us-west-1.amazonaws.com/....."
+}
+```
+
+</ResponseExample>
