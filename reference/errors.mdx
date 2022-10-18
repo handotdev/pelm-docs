@@ -1,0 +1,38 @@
+---
+title: "Errors"
+description: "Pelm uses conventional HTTP response codes to indicate the success or failure of an API request. Codes in the 2xx range indicate success and codes in the 4xx range indicate an error that failed given the information provided (e.g., a required parameter was omitted, an address is invalid, etc.). Codes in the 5xx range indicate an error with Pelm's servers."
+---
+
+## HTTP Status Codes Summary
+
+| Status Code          | Description                                                                                       |
+| -------------------- | ------------------------------------------------------------------------------------------------- |
+| 200 - OK             | Request success                                                                                   |
+| 400 - Bad Request    | The request was malformed, usually due to a missing parameter                                     |
+| 401 - Unauthorized   | API key or access token is invalid                                                                |
+| 402 - Request Failed | The parameters were valid but the request failed, usually because the call quota has been reached |
+| 403 - Forbidden      | API key or access token is unauthorized for the requested resource                                |
+| 5xx - Server Error   | Something went wrong on Pelm's servers                                                            |
+
+## Error Codes Summary
+
+| Error Code                   | Description                                                                   |
+| ---------------------------- | ----------------------------------------------------------------------------- |
+| parameter_missing            | A required parameter is missing from the request                              |
+| parameter_invalid            | A request parameter is invalid, usually due to it having the wrong format     |
+| connect_max_attempted_logins | The maximum number of Connect login attempts has been reached                 |
+| token_invalid                | The provided access token is invalid                                          |
+| credentials_invalid          | The provided API keys are invalid                                             |
+| mfa_required                 | MFA is required to connect the account                                        |
+| mfa_failed                   | MFA verification failed                                                       |
+| utility_unavailable          | Support has not been built out yet for the given utility                      |
+| quota_reached                | Maximum number of calls for the plan has been reached                         |
+| card_invalid                 | Credit card is invalid                                                        |
+| feature_unavailable          | Support for given feature hasn't been built out for the given utility         |
+| data_unavailable             | Data is unavailable for the user, usually becomes available within 15 minutes |
+| internal_error               | Something went wrong on Pelm's servers                                        |
+| permission_denied            | Unauthorized for requested resource                                           |
+| add_payment_failed           | Couldn't add payment method to utility account                                |
+| address_invalid              | Address is invalid, usually service already exists for the property           |
+| job_failed                   | Asynchronous job to make service changes failed                               |
+| job_does_not_exist           | Asynchronous job to make service changes doesn't exist                        |

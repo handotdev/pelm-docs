@@ -1,0 +1,10 @@
+---
+title: "Data Availability"
+description: "Once your user successfully completes the Connect flow, it may take some time for Pelm to load their data."
+---
+
+The initial request to fetch `Account` objects via `/accounts` may take a few seconds to synchronously return a response. In rare instances, this initial request will time out and return a 500 error with error code `data_unavailable`, so we recommend you poll this endpoint. After the data becomes available, this endpoint will always return a response immediately.
+
+The same applies to the initial fetch for intervals via `/intervals`.
+
+`Bill` data may take up to ten minutes to become available.

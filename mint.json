@@ -1,0 +1,110 @@
+{
+  "name": "Pelm",
+  "basePath": "/docs",
+  "logo": {
+    "light": "/docs/logo/light.png",
+    "dark": "/docs/logo/dark.png"
+  },
+  "api": {
+    "baseUrl": "https://api.pelm.com",
+    "auth": {
+      "method": "bearer"
+    }
+  },
+  "favicon": "/favicon.png",
+  "colors": {
+    "primary": "#175CFF",
+    "light": "#4D9CFF",
+    "dark": "#0047F0",
+    "ultraLight": "#EBF3FE",
+    "ultraDark": "#0039BE"
+  },
+  "anchors": [
+    {
+      "name": "API Reference",
+      "icon": "rectangle-terminal",
+      "color": "#2564eb",
+      "url": "api-reference"
+    },
+    {
+      "name": "Security",
+      "icon": "shield-halved",
+      "url": "https://www.pelm.com/security"
+    }
+  ],
+  "topbarLinks": [
+    {
+      "name": "Contact",
+      "url": "https://www.pelm.com/contact"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Schedule Demo",
+    "url": "https://www.pelm.com/register"
+  },
+  "navigation": [
+    {
+      "group": "Introduction",
+      "pages": [
+        "welcome",
+        "basic-concepts",
+        "getting-started",
+        "sandbox-user",
+        "quickstart-app"
+      ]
+    },
+    {
+      "group": "Connect",
+      "pages": [
+        "reference/connect/overview",
+        "reference/connect/embedding-connect",
+        "reference/connect/redirecting-to-connect"
+      ]
+    },
+    {
+      "group": "Reference",
+      "pages": [
+        "reference/user-authorization",
+        "reference/data-availability",
+        "reference/utilities",
+        "reference/unit-codes",
+        "reference/errors"
+      ]
+    },
+    {
+      "group": "API Documentation",
+      "pages": ["api-reference/explos-authentication", "api-reference/overview"]
+    },
+    {
+      "group": "End User Group API",
+      "pages": [
+        "api-reference/end-user-group-api/get-or-create",
+        "api-reference/end-user-group-api/update",
+        "api-reference/end-user-group-api/delete",
+        "api-reference/end-user-group-api/refresh-token"
+      ]
+    },
+    {
+      "group": "End User API",
+      "pages": [
+        "api-reference/end-user-api/get-or-create",
+        "api-reference/end-user-api/update",
+        "api-reference/end-user-api/delete"
+      ]
+    },
+    {
+      "group": "Export Dashboard API",
+      "pages": ["api-reference/export-dashboard-api/get-snapshot-url"]
+    },
+    {
+      "group": "Dashboard API",
+      "pages": ["api-reference/dashboard-api/get-dashboard"]
+    }
+  ],
+  "classes": {
+    "topbarCtaButton": "inline-flex items-center space-x-1 px-4 py-1 text-sm font-medium rounded-full text-white bg-primary hover:bg-primary-dark"
+  },
+  "footerSocials": {
+    "github": "https://github.com/Pelm-Technologies"
+  }
+}

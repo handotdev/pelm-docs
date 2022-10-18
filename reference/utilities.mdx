@@ -1,0 +1,49 @@
+---
+title: "Supported Utilities and Features"
+---
+
+Below is a list of utilities that Pelm currently has support for. If you need a specific utility integration, email us at [info@pelm.com](mailto:info@pelm.com)
+
+Coming Soon: Portland General Electric, Duke Energy, PepCo
+
+| id (integer) | full_name (string)                        | short_name (string) |
+| ------------ | ----------------------------------------- | ------------------- |
+| 1            | Pacific Gas and Electric                  | PGE                 |
+| 2            | Southern California Edison                | SCE                 |
+| 57           | San Diego Gas & Electric                  | SDGE                |
+| 428          | Consolidated Edison                       | ConEd               |
+| 216          | Commonwealth Edison                       | ComEd               |
+| 651          | Puget Sound Energy                        | PSE                 |
+| 250          | Baltimore Gas and Electric                | BGE                 |
+| 50           | Los Angeles Department of Water and Power | LADWP               |
+| 677          | Southern California Gas Company           | SoCalGas            |
+| 563          | CenterPoint Energy                        | CPE                 |
+| 154          | Georgia Power                             | GP                  |
+| 121          | Florida Power & Light                     | FPL                 |
+| 74           | Eversource Energy                         | Eversource          |
+
+### Supported Functionality
+
+Pelm's API tries to maintain feature parity amongst all utilities. However, sometimes a utility may not support a specific data field or function. This section outlines function compatibility with different utilities.
+
+An empty field implies that the specified feature is not supported for the utility.
+
+15 min granularity does not imply that all Users for a given utility will have interval data with that level of granularity. e.g., for PGE, some users have 15-minute intervals available while others have 1-hour intervals.
+
+Usage data availability describes how soon usage data becomes available. PGE has a 24-hour delay, which means Monday's usage data will become available Wednesday 2 am PST. ConEd data is available the next day, which means Monday's usage data will become available Tuesday 2am PST.
+
+| Utility        | Electricity usage intervals granularity | Gas usage intervals granularity | Usage data availability | Emissions data supported | Write APIs                                                           | Bill data |
+| -------------- | --------------------------------------- | ------------------------------- | ----------------------- | ------------------------ | -------------------------------------------------------------------- | --------- |
+| **PG&E**       | 15 min                                  | 15 min                          | 24 hour delay           | Yes                      | Pay Bill, Add Payment Method, Update Login Info, Update Account Info | JSON, PDF |
+| **SCE**        | 15 min                                  | 24 hour delay                   | Yes                     | JSON                     |                                                                      |           |
+| **SDGE**       | 15 min                                  | 15 min                          | Next day                | Yes                      |                                                                      |           |
+| **ConEd**      | 15 min                                  | 15 min                          | Next day                | JSON, PDF                |                                                                      |           |
+| **ComEd**      | 15 min                                  | 15 min                          | 24 hour delay           | JSON                     |                                                                      |           |
+| **PSE**        | 15 min                                  | 15 min                          | 24 hour delay           | Add payment method       |                                                                      |           |
+| **BGE**        | 15 min                                  | 15 min                          | 24 hour delay           |                          |                                                                      |           |
+| **LADWP**      | Billing period                          | 24 hour delay                   |                         |                          |                                                                      |           |
+| **SoCalGas**   | 1 hour                                  | 24 hour delay                   | Yes                     |                          |                                                                      |           |
+| **CPE**        | 1 hour                                  | Billing period                  | Next day                |                          |                                                                      |           |
+| **GP**         | 1 hour                                  | 24 hour delay                   |                         |                          |                                                                      |           |
+| **FPL**        | 1 hour                                  | Next day                        |                         |                          |                                                                      |           |
+| **Eversource** | Billing period                          | 24 hour delay                   | JSON, PDF               |                          |                                                                      |           |

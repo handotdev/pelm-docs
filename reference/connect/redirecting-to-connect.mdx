@@ -1,0 +1,94 @@
+---
+title: "Redirecting to Connect"
+---
+
+Another way of getting your user's authorization is by redirecting them to a Pelm-hosted Connect flow at `https://connect.pelm.com`.
+
+1. Create a Connect token
+2. Redirect your user to Connect
+3. User inputs utility credentials
+4. Retrieve an authorization code
+5. Exchange code for an access token
+
+## Create connect\_token
+
+The first step is creating a Connect token. This is an extra security measure that abstracts away information like your `Pelm-Client-Id` and `user_id` from the web client.
+
+To retrieve a Connect token, make a POST to the [/auth/connect\_token](https://pelm.readme.io/reference/post%5Fauth-connect-token) endpoint:
+
+cURL
+
+`curl -X POST https://api.pelm.com/auth/connect-token -H "Pelm-Client-Id: {CLIENT_ID}" -H "Pelm-Secret: {CLIENT_SECRET}" -F "user_id={YOUR_USER_ID}" -F "utility_id={UTILITY_ID}"
+`
+
+Included in the form parameters must be your own unique identifier for the user. This identifier will be how you can associate responses from API endpoints with a particular user record stored in your records.
+
+Pelm will infer which flow (either **update** or **create**) the User will see based on the `user_id` you pass. In **create** mode, the user will see the following screens:
+
+* Terms of Service Screen (accepting terms of service)
+* Utility Selection Screen (selecting a utility)
+* Credentials Screen (entering utility credentials)
+
+In **update** mode, the user will start directly at the Utility Selection Screen.
+
+If you submit a new `user_id` for a user that has already connected their account with you, your previously submitted `user_id` will be overwritten by the new value. Make sure you change this appropriately in your records.
+
+Include the optional `utility_id` parameter if you want your User to skip the Utility Selection Screen. You can find a list of `utility_id`s [here](/reference/utilities).
+
+Connect Tokens expire after 30 minutes.
+
+## Redirect user to Connect
+
+Redirect your user to the following url: `https://connect.pelm.com/?redirect_uri=REDIRECT_URL&connect_token=CONNECT_TOKEN&state=STATE`.
+
+Here are the parameters explained
+
+| Parameter      | Required | Description                                                                                                       |
+| -------------- | -------- | ----------------------------------------------------------------------------------------------------------------- |
+| redirect\_uri  | true     | The uri your user is redirected to after they successfully connect their utility login via the Connect flow.      |
+| connect\_token | true     | connect\_token created in previous step                                                                           |
+| state          | false    | Optional state parameter that will be included as a query parameter when the user is redirected to redirect\_uri. |
+
+## Retrieve code
+
+Upon successfully completing the Connect flow, your user will be redirected to a uri of format `REDIRECT_URI?code=CODE&state=STATE`, where `REDIRECT_URI` is the redirect\_uri specified by you.
+
+| Parameter | Required | Description                                                                                                                           |
+| --------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| code      | true     | Short-lived code that must be exchanged for an access\_token via [/auth/token](https://pelm.readme.io/reference/post%5Fauth-token-1). |
+| state     | false    | state parameter specified by you.                                                                                                     |
+
+## Exchange code for access\_token
+
+An `access_token` gives you access to a given user's data.
+
+To exchange an authorization `code` for an `access_token`, make a POST request to `https://api.pelm.com/auth/token` [(API reference)](https://pelm.readme.io/reference/post%5Fauth-token-1). In the request body, include the `code`. You also need to include a `grant_type` parameter set to "code". 
+
+The `code` is the string you retrieved in the previous step.
+
+Add your `Pelm-Client-Id` and `Pelm-Secret` in the header. For example:
+
+cURL
+
+`curl --data "code={AUTHORIZATION_CODE}&grant_type=code" https://api.pelm.com/tokens -H "Pelm-Client-Id: YOUR_CLIENT_ID" -H "Pelm-Secret: YOUR_CLIENT_SECRET"
+`
+
+If you've done this correctly, you'll receive the `access_token`:
+
+JSON
+
+`{
+  'access_token': '57f20230-4ee7-11ec-9b0c-acde48001122',
+  'access_token_expires_in': 3600,
+  'refresh_token': 'aea9b417e72b3978c5bfcd0782c3a486ec63abf5e85ce9a62ba36d1b18b12488',
+  'refresh_token_expires_in': 1314000
+}
+`
+
+Note that the `access_token` **will not expire**. You should securely store this token in your database.
+
+You can ignore all the other fields in this response: `access_token_expires_in`, `refresh_token`, `refresh_token_expires_in`. They're included for legacy applications.
+
+## Next steps
+
+Now that you have your `access_token`, you can start making requests for your user's data. Request your user's accounts via [/accounts](https://pelm.readme.io/reference/get%5Faccounts).

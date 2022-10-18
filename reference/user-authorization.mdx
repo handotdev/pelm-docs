@@ -1,0 +1,13 @@
+---
+title: "User Authorization"
+---
+
+## Connect
+
+For a user, Alice, to give you access to her data, she must complete the Connect flow. Once she's done so, you'll receive an `authorization_code`. You must then exchange this for an `access_token` and `refresh_token` by making a request to the [/auth/token](https://pelm.readme.io/reference/post%5Fauth-token-1) endpoint and setting `grant_type = 'code'` in the request body.
+
+## Access Token
+
+The `access_token` grants you access to Alice's (and only Alice's) data. When making requests for Alice's data, the `access_token` must be passed in the `Authorization` header as `Bearer {{access_token}}`.
+
+The `access_token` will not expire. Make sure you securely store it in your database.
