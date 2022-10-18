@@ -6,10 +6,7 @@
     "dark": "/docs/logo/dark.png"
   },
   "api": {
-    "baseUrl": "https://api.pelm.com",
-    "auth": {
-      "method": "bearer"
-    }
+    "baseUrl": "https://api.pelm.com"
   },
   "favicon": "/favicon.png",
   "colors": {

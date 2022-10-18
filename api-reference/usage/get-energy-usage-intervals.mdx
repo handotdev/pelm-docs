@@ -1,0 +1,123 @@
+---
+title: "Get Energy Usage Intervals"
+description: "Get a list of interval objects corresponding to energy usage and green house gas emissions for a given energy account in a specific time range. Emissions data is currently only available for PG&E and SCE."
+api: "GET /intervals"
+---
+
+The type of energy intervals (gas vs. electric) is specified in the `type` query param. Information on whether this account has electricity and/or gas data is found in the `available_meter_type` field of the `Account` object, which can be queried via `/accounts`. Gas data is currently only available for PG&E.
+
+Timestamp is in epoch time, usage is in units specified by the unit for that account (otherwise kWh or therms if no unit is specified), and emissions is in kgCO2e (kg of carbon dioxide equivalent).
+
+If neither start_date nor end_date are provided, response will include usage data for the last two months.
+
+If start_date is included but end_date is not, response will include usage data for two months starting at start_date.
+
+If end_date is included but start_date is not, response will include usage data for two months ending at end_date.
+
+Note that this endpoint was previously named `/accounts/{account_id}/intervals`, which is still live.
+
+### Query Params
+
+<ParamField query="account_id" type="string" required>
+  Energy account id to query usage intervals for. account_id's are returned in
+  the /accounts response.
+</ParamField>
+
+<ParamField query="type" type="string">
+  Must be either `ELECTRIC` or `GAS`. Defaults to `ELECTRIC` if omitted.
+</ParamField>
+
+<ParamField query="start_date" type="number">
+  Start date of desired intervals in UNIX time
+</ParamField>
+
+<ParamField query="end_date" type="number">
+  End date of desired intervals in UNIX time
+</ParamField>
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  access_token passed as "Bearer \{access_token}"
+</ParamField>
+
+<ParamField header="Pelm-Client-Id" type="string" required>
+  Pelm-Client-Id given to a developer when they register
+</ParamField>
+
+<ParamField header="Pelm-Secret" type="string" required>
+  Pelm-Secret given to a developer when they register
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+     --url https://api.pelm.com/intervals \
+     --header 'accept: application/json'
+```
+
+</RequestExample>
+
+### Response
+
+<ResponseField name="utility" type="string">
+  Full name of utility
+</ResponseField>
+
+<ResponseField name="account" type="object">
+  <Expandable>
+    <ResponseField name="id" type="string"></ResponseField>
+    <ResponseField name="account_number" type="string"></ResponseField>
+    <ResponseField name="address" type="string"></ResponseField>
+    <ResponseField name="available_meter_types" type="array of strings">
+      The types of meters available for this account. This defines what kind of
+      intervals you can query for this account via /intervals.
+    </ResponseField>
+    <ResponseField name="usage_unit" type="string">
+      Unit for electricity usage. [Learn
+      more](https://pelm.readme.io/reference/unit-codes)
+    </ResponseField>
+    <ResponseField name="gas_usage_unit" type="string">
+      Unit for gas usage. Omitted if account does not have a gas meter. [Learn
+      more](https://pelm.readme.io/reference/unit-codes)
+    </ResponseField>
+    <ResponseField name="ghg_emissions_unit" type="string">
+      Unit for greenhouse gas emissions. [Learn
+      more](https://pelm.readme.io/reference/unit-codes)
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="intervals" type="array of objects">
+  <Expandable>
+    <ResponseField name="start" type="int64">
+      The start time of interval in UNIX time
+    </ResponseField>
+    <ResponseField name="end" type="int64">
+      The end time of interval in UNIX time
+    </ResponseField>
+    <ResponseField name="usage" type="number">
+      The net electricity or gas usage during this time period. The unit is kWh
+      for electricity usage and therms for gas usage.
+    </ResponseField>
+    <ResponseField name="consumption" type="number">
+      The amount of electricity consumed in kWh during this time period. Always
+      null for gas intervals. Availability varies by Utility and Account.
+    </ResponseField>
+    <ResponseField name="consumption" type="number">
+      The amount of electricity consumed in kWh during this time period. Always
+      null for gas intervals. Availability varies by Utility and Account.
+    </ResponseField>
+    <ResponseField name="generation" type="number">
+      The amount of electricity generated in kWh during this time period. Always
+      null for gas intervals. Availability varies by Utility and Account.
+    </ResponseField>
+    <ResponseField name="ghg_emissions" type="number">
+      The green house gases emitted by this user in kgCO2e (kg of carbon dioxide
+      equivalent). This data is currently only available for PG&E users.
+      Emissions are calculated by taking CAISO data of emission rate at the
+      given time multiplied by the electricity usage.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
