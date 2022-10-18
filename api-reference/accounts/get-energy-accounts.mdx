@@ -1,0 +1,63 @@
+---
+title: "Get Energy Accounts"
+description: "Get a list of energy account ids that are tied to a given user."
+api: "GET /accounts"
+---
+
+<Note>
+  Note that this endpoint was previously named `/users/:user_id/accounts`, which
+  is still live (user_id is the id you submitted for the user that you submitted
+  when you initialized a Connect Token).
+</Note>
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  access_token passed as "Bearer \{access_token}"
+</ParamField>
+
+<ParamField header="Pelm-Client-Id" type="string" required>
+  Pelm-Client-Id given to a developer when they register
+</ParamField>
+
+<ParamField header="Pelm-Secret" type="string" required>
+  Pelm-Secret given to a developer when they register
+</ParamField>
+
+<RequestExample>
+
+```bash
+curl --request GET \
+     --url https://api.pelm.com/accounts \
+     --header 'accept: application/json'
+```
+
+</RequestExample>
+
+### Response
+
+<ResponseField name="id" type="string"></ResponseField>
+
+<ResponseField name="account_number" type="string"></ResponseField>
+
+<ResponseField name="address" type="string"></ResponseField>
+
+<ResponseField name="available_meter_types" type="array of strings">
+  The types of meters available for this account. This defines what kind of
+  intervals you can query for this account via /intervals.
+</ResponseField>
+
+<ResponseField name="usage_unit" type="string">
+  Unit for electricity usage. [Learn
+  more](https://pelm.readme.io/reference/unit-codes)
+</ResponseField>
+
+<ResponseField name="gas_usage_unit" type="string">
+  Unit for gas usage. Omitted if account does not have a gas meter. [Learn
+  more](https://pelm.readme.io/reference/unit-codes)
+</ResponseField>
+
+<ResponseField name="ghg_emissions_unit" type="string">
+  Unit for greenhouse gas emissions. [Learn
+  more](https://pelm.readme.io/reference/unit-codes)
+</ResponseField>

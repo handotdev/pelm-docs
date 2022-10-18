@@ -1,0 +1,67 @@
+---
+title: "Get User"
+description: "Get details for a user."
+api: "GET /users/{user_id}"
+---
+
+### Path Params
+
+<ParamField path="user_id" type="string" required>
+  user_id for user that you submitted when you first created a Connect Token for
+  this user.
+</ParamField>
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  access_token passed as "Bearer \{access_token}"
+</ParamField>
+
+<ParamField header="Pelm-Client-Id" type="string" required>
+  Pelm-Client-Id given to a developer when they register
+</ParamField>
+
+<ParamField header="Pelm-Secret" type="string" required>
+  Pelm-Secret given to a developer when they register
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+     --url https://api.pelm.com/users/user_id \
+     --header 'accept: application/json'
+```
+
+</RequestExample>
+
+### Response
+
+<ResponseField name="id" type="string">
+  This is the id specified by you when you initially created the Connect Token
+  to connect this user's utility account.
+</ResponseField>
+
+<ResponseField name="utility" type="object">
+  <Expandable>
+    <ResponseField name="id" type="number"></ResponseField>
+    <ResponseField name="full_name" type="string"></ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="utility_username" type="string">
+  This is the id specified by you when you initially created the Connect Token
+  to connect this user's utility account.
+</ResponseField>
+
+<ResponseField name="credentials_valid" type="boolean">
+
+Boolean field indicating whether the credentials we have for this User are
+valid. A common scenario that would cause this field to become false is the
+User changing their password.
+
+If this field is false, then we're unable to
+pull the latest data for this User, and your User needs to go through the
+Connect flow again.
+
+</ResponseField>

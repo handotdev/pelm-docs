@@ -72,33 +72,41 @@
       ]
     },
     {
-      "group": "API Documentation",
-      "pages": ["api-reference/explos-authentication", "api-reference/overview"]
+      "group": "Pelm API",
+      "pages": ["api-reference/overview"]
     },
     {
-      "group": "End User Group API",
+      "group": "Users",
       "pages": [
-        "api-reference/end-user-group-api/get-or-create",
-        "api-reference/end-user-group-api/update",
-        "api-reference/end-user-group-api/delete",
-        "api-reference/end-user-group-api/refresh-token"
+        "api-reference/users/get-user",
+        "api-reference/users/delete-user"
       ]
     },
     {
-      "group": "End User API",
+      "group": "Accounts",
+      "pages": ["api-reference/accounts/get-energy-accounts"]
+    },
+    {
+      "group": "Usage",
+      "pages": ["api-reference/usage/get-energy-usage-intervals"]
+    },
+    {
+      "group": "Bills",
       "pages": [
-        "api-reference/end-user-api/get-or-create",
-        "api-reference/end-user-api/update",
-        "api-reference/end-user-api/delete"
+        "api-reference/bills/get-bills",
+        "api-reference/bills/get-bill-pdf"
       ]
     },
     {
-      "group": "Export Dashboard API",
-      "pages": ["api-reference/export-dashboard-api/get-snapshot-url"]
+      "group": "Emission Rates",
+      "pages": ["api-reference/emission-rates/get-emission-rates"]
     },
     {
-      "group": "Dashboard API",
-      "pages": ["api-reference/dashboard-api/get-dashboard"]
+      "group": "Auth",
+      "pages": [
+        "api-reference/auth/create-access-token",
+        "api-reference/auth/create-a-connect-token"
+      ]
     }
   ],
   "classes": {
