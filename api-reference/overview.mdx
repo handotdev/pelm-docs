@@ -1,26 +1,26 @@
 ---
 title: "Overview"
+description: "Welcome to the Pelm API Reference"
 ---
 
-<Info>
-  For all api requests, you must have a trailing slash (/) at the end of your
-  request. Otherwise, your request will be rejected as 'Method not allowed'
-</Info>
+## Base URL
 
-## API Endpoints
+Use the following endpoint as the base URL for all of the following endpoints
 
-### End User Group API
+```bash
+https://api.pelm.com
+```
 
-Use the End User Group API to programatically pull end user groups when embedding your dashboards. This allows you to use Explo without necessarily storing any of our tokens in your database, keeping your integration more clean and flexible.
+## Object types
 
-### End User API
+### The User object
 
-Use the End User API to programatically manage individual end users information.
+A `User` corresponds to a utility login. If your user has multiple utility accounts, e.g. PG&E and SCE, each one will correspond to a unique `User` object.
 
-### Export Dashboard API
+### The Account object
 
-Use the Export Dashboard API to programatically pull PDF or image screenshots of your dashboards.
+The `Account` object corresponds to an account under a utility login. If a user has a residential home, an investment home, and a vacation home, these would correspond to three different Pelm `Account` objects.
 
-### Dashboard API
+### Bills
 
-Use the Dashboard API to pull a list of all your Explo dashboards and their various attributes.
+A `Bill` corresponds to a utility bill for a single billing period.

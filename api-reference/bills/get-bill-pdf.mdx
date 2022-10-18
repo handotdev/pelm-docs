@@ -1,0 +1,44 @@
+---
+title: "Get Bill PDF"
+description: "Returns the pdf of a bill with specified bill_id as a file."
+api: "GET /bills/{bill_id}/pdf"
+---
+
+<Note>
+  Response will have 'Content-Type=application/pdf'. If a pdf is not available
+  for the bill, returns a 500 error response.
+</Note>
+
+### Path Params
+
+<ParamField path="bill_id" type="string" required>
+  Bill id
+</ParamField>
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  access_token passed as "Bearer \{access_token}"
+</ParamField>
+
+<ParamField header="Pelm-Client-Id" type="string" required>
+  Pelm-Client-Id given to a developer when they register
+</ParamField>
+
+<ParamField header="Pelm-Secret" type="string" required>
+  Pelm-Secret given to a developer when they register
+</ParamField>
+
+### Response
+
+The PDF file of the bill
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+     --url https://api.pelm.com/bills/bill_id/pdf \
+     --header 'accept: application/pdf'
+```
+
+</RequestExample>

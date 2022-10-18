@@ -1,0 +1,40 @@
+---
+title: "Delete User"
+description: "Revoke your authorization to this user's data and delete their data from Pelm. You won't be charged for making this request."
+api: "DELETE /users/{user_id}"
+---
+
+### Path Params
+
+<ParamField path="user_id" type="string" required>
+  user_id for user that you submitted when you first created a Connect Token for
+  this user.
+</ParamField>
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  access_token passed as "Bearer \{access_token}"
+</ParamField>
+
+<ParamField header="Pelm-Client-Id" type="string" required>
+  Pelm-Client-Id given to a developer when they register
+</ParamField>
+
+<ParamField header="Pelm-Secret" type="string" required>
+  Pelm-Secret given to a developer when they register
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl --request DELETE \
+     --url https://api.pelm.com/users/user_id \
+     --header 'accept: text/plain'
+```
+
+</RequestExample>
+
+### Response
+
+The request returns a string indicating the success or failure of the operation

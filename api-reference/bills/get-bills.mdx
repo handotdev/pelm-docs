@@ -1,0 +1,83 @@
+---
+title: "Get Bills"
+api: "GET /bills"
+description: "Get all bills for all Accounts for the given User, ordered by statement_date desc."
+---
+
+### Query Params
+
+<ParamField query="account_id" type="string">
+  Optional field specifying account to query bills for. If omitted, bills for
+  all accounts under this User will be returned. account_id's are returned in
+  the /accounts response.
+</ParamField>
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  access_token passed as "Bearer \{access_token}"
+</ParamField>
+
+<ParamField header="Pelm-Client-Id" type="string" required>
+  Pelm-Client-Id given to a developer when they register
+</ParamField>
+
+<ParamField header="Pelm-Secret" type="string" required>
+  Pelm-Secret given to a developer when they register
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+     --url https://api.pelm.com/bills \
+     --header 'accept: application/json'
+```
+
+</RequestExample>
+
+### Response
+
+<ResponseField name="account_id" type="string">
+  ID of account that bills belong to
+</ResponseField>
+
+<ResponseField name="bills" type="array of objects">
+  Bills for account
+  <Expandable>
+    <ResponseField name="id" type="string" />
+    <ResponseField name="account_id" type="string" />
+    <ResponseField name="start_date" type="string" />
+    <ResponseField name="end_date" type="string" />
+    <ResponseField name="statement_date" type="string" />
+    <ResponseField name="due_date" type="string" />
+    <ResponseField name="payment_date" type="string">
+      Date the bill is set to be paid if auto-pay is enabled.
+    </ResponseField>
+    <ResponseField name="total_amount_due" type="number">
+      Total amount due for this bill, which is equivalent to any existing
+      balance plus total charges from this billing period. e.g. if you have an
+      unpaid balance of $50 from last billing period and your total charges for
+      this billing period is $100, then total_amount_due = 150.
+    </ResponseField>
+    <ResponseField name="total_charges" type="number">
+      Total charges for energy usage during this billing period.
+    </ResponseField>
+    <ResponseField name="charges" type="object">
+      <Expandable>
+        <ResponseField name="electric_charges" type="number">
+          Total electric charges from Utility. Equal to delivery + generation
+          charges if the Utility is responsible for generating electricity for
+          this Account. Equal to just delivery charges if a separate company
+          handles electricity generation.
+        </ResponseField>
+        <ResponseField name="supplier_electric_charges" type="number">
+          Electricity generation charges from supplier. Null if Utility is
+          supplier.
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    <ResponseField name="electric_usage_kwh" type="number" />
+    <ResponseField name="gas_usage_therm" type="number" />
+  </Expandable>
+</ResponseField>

@@ -1,0 +1,73 @@
+---
+title: "Get Emission Rates"
+description: "Get emission rate intervals for a given utility."
+api: "GET /emission-rates"
+---
+
+<Note>
+  Currently only supported for PG&E (id=1), SCE (id=2), SDG&E (id=57), LADWP
+  (id=50). View list of supported utilities and their utility_id's here.
+</Note>
+
+### Query Params
+
+<ParamField query="utility_id" type="integer" required>
+  id corresponding to the utility you want to fetch rates for. Learn more at the
+  [list of all
+  utility_id's](https://pelm.readme.io/reference/supported-utilities).
+</ParamField>
+
+<ParamField query="start_time" type="integer">
+  Start time of desired intervals in UNIX time. Defaults to one month before
+  end_time.
+</ParamField>
+
+<ParamField query="end_time" type="integer">
+  End time of desired intervals in UNIX time. Defaults to current time.
+</ParamField>
+
+### Headers
+
+<ParamField header="Pelm-Client-Id" type="string" required>
+  Pelm-Client-Id given to a developer when they register
+</ParamField>
+
+<ParamField header="Pelm-Secret" type="string" required>
+  Pelm-Secret given to a developer when they register
+</ParamField>
+
+### Response
+
+<ResponseField name="utility_id" type="integer">
+  Id of utility
+</ResponseField>
+
+<ResponseField name="ghg_emission_rate_unit" type="string">
+  Unit for greenhouse gas emission rate (e.g. kg_co2e_per_kwh, which corresponds
+  to kg of CO2 equivalent emitted per kWh of electricity consumed).
+</ResponseField>
+
+<ResponseField name="intervals" type="array of objects">
+  <Expandable>
+    <ResponseField name="start" type="int64">
+      The start time of interval in UNIX time
+    </ResponseField>
+    <ResponseField name="end" type="int64">
+      The end time of interval in UNIX time
+    </ResponseField>
+    <ResponseField name="ghg_emission_rate" type="number">
+      The rate of greenhouse gas emissions for this utility at a particular
+      point of time. Calculated using historical demand and emissions data.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+     --url https://api.pelm.com/emission-rates \
+     --header 'accept: application/json'
+```
+
+</RequestExample>
