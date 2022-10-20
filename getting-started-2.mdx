@@ -1,0 +1,89 @@
+---
+title: "Getting Started"
+---
+
+import { Api } from "@/ui/Api";
+
+
+
+## Registering for Pelm
+TODO: update this
+
+To start using Pelm, first register at [pelm.com/register](https://www.pelm.com/register). Your **Company** will be displayed to users in Connect (more details later). Upon successful account creation, you'll receive an email with your `Pelm-Client-Id` and `Pelm-Secret`.
+
+<Info>Your `Pelm-Client-Id` and `Pelm-Secret` will be essential for making requests to Pelm. Please keep these secret and in a safe place.</Info>
+
+If you need to update any of these fields or need help with anything else, email us at [info@pelm.com](mailto:info@pelm.com).
+
+## Make your first request
+
+Quick sanity check.
+
+<Api api="POST https://api.pelm.com/auth/connect-token" apiComponents={
+  [
+    {
+      type: 'ParamField',
+      attributes: [
+        {
+          name: 'body',
+          value: 'user_id',
+        },
+        {
+          name: 'type',
+          value: 'string',
+        },
+        {
+          name: 'required',
+          value: true,
+        }
+      ]
+    },
+    {
+      type: 'ParamField',
+      attributes: [
+        {
+          name: 'body',
+          value: 'utility_id',
+        },
+        {
+          name: 'type',
+          value: 'string',
+        }
+      ]
+    },
+  ]
+}>
+
+</Api>
+
+// TODO: show response
+
+If you get a `connect_token` back, then everything works fine and you're good to continue aoiwejfoiawjefoawef.
+
+## Utility Credentials
+
+In order to test our API, you'll need access to a set of valid credentials for one of our supported utilities. Alternatively, you can use our Sandbox User.
+
+// TODO: link
+
+## Core Concepts
+Review some of core concepts, which will help you make sense of our API.
+
+<Card title="Basic Concepts" icon={duotone("link")} href="/basic-concepts-2">
+</Card>
+
+## Let's write some code
+Now that you have a basic understanding of our core concepts, it's time to integrate Pelm.
+
+If you're looking to start using Pelm in an existing application, follow the Connect Guide to embed our Connect component into your frontend and create your first `User`.
+
+If you just want to get up and running ASAP, clone and follow along the ReadMe of our Quickstart Repo.
+
+<CardGroup cols={2}>
+  <Card title="Connect Guide" icon={duotone("square-1")} color="#ea5a0c" href="/connect-guide">
+    For integrating Connect into your existing application.
+  </Card>
+  <Card title="Quickstart Repo" icon={duotone("square-2")} color="#0285c7" href="https://github.com/Pelm-Technologies/quickstart">
+    If you prefer to learn by referencing example code or just want to get everything running locally ASAP.
+  </Card>
+</CardGroup>

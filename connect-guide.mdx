@@ -1,0 +1,254 @@
+---
+title: "Connect Guide"
+---
+
+// TODO: include diagram here
+// TODO: include better description
+
+
+One method of implementing Connect is by embedding it in your application, either via a script tag or the `react-pelm-connect` npm library. Here are the steps to achieving this:
+
+1. Embed Connect in your application
+2. Create a Connect token
+3. Open Connect
+4. User inputs utility credentials
+5. Retrieve an authorization code
+6. Exchange code for an access token
+
+## 0. Install Connect
+
+TODO: link to npm library
+
+<CodeGroup>
+
+```bash React
+npm install react-pelm-connect
+```
+
+```html HTML/JS
+<script src="https://cdn.pelm.com/initialize.js"></script>
+```
+
+</CodeGroup>
+
+
+## 1. Backend - create connect_token
+
+The first step is creating a Connect token. This is an extra security measure that abstracts away information like your `Pelm-Secret` and `user_id` from the web client.
+
+// TODO: move this info to top
+
+
+You must include your own unique identifier for your user in the query parameters. This identifier is how you'll be able to associate responses from API endpoints with a particular user record stored in your records.
+
+
+
+Pelm will infer which flow (either **update** or **create**) your user will see based on the `user_id` you pass. In **create** mode, the user will see the following screens:
+
+- Terms of Service Screen (accepting terms of service)
+- Utility Selection Screen (selecting a utility)
+- Credentials Screen (entering utility credentials)
+
+In **update** mode, the user will start directly at the Utility Selection Screen.
+
+If you submit a new `user_id` for a user that has already connected their account with you, your previously submitted `user_id` will be overwritten by the new value. Make sure you change this appropriately in your records.
+
+Include the optional `utility_id` parameter if you want your User to skip the Utility Selection Screen. You can find a list of `utility_id`s [here](/reference/utilities).
+
+// TODO: make sure links are correct
+To retrieve a `connect_token`, make a POST request to the [/auth/connect_token](https://pelm.readme.io/reference/post%5Fauth-connect-token) endpoint:
+
+<CodeGroup>
+```js Node.js
+// TODO: make sure this code is correct
+
+import express from "express";
+import fetch from "node-fetch";
+
+const app = express();
+const port = 3001
+
+app.post('/connect-token', (req, res, next) => {
+
+  const headers = new Headers();
+  headers.set('Pelm-Client-Id', PELM_CLIENT_ID);
+  headers.set('Pelm-Secret', PELM_SECRET);
+
+  const encodedParams = new URLSearchParams();
+  encodedParams.set('user_id', USER_ID);
+
+  const requestOptions = {
+    method: 'POST',
+    headers,
+    body: encodedParams,
+  };
+
+  const response = await fetch('https://api.pelm.com/auth/connect-token', requestOptions);
+  const body = await response.json();
+  res.send(body);
+})
+```
+
+```bash cURL
+curl -X POST https://api.pelm.com/auth/connect-token -H "Pelm-Client-Id: {CLIENT_ID}" -H "Pelm-Secret: {CLIENT_SECRET}" -F "user_id={YOUR_USER_ID}" -F "utility_id={UTILITY_ID}"
+```
+</CodeGroup>
+
+
+## 2. Frontend - initialize Connect
+
+Initialize and open Connect on your frontend.
+
+#### Config object
+
+Pass your `connect_token` and callbacks to Connect via a config object.
+
+| Parameter     | Type                                  | Description |
+| ------------- | ------------------------------------- | ----- |
+| connectToken  | `string`                               | Token generated in step #1. |
+| onSuccess     | `(authorizationCode: string) => {}`     | Called when your User successfully connects their Utility login. |
+| onExit        | `(status: string, metadata: any) => {}` | Called when Connect is exited. |
+
+// TODO: somewhere that links to status
+
+#### Open Connect
+
+Once you've created the config object, you can initialize Connect in a few ways.
+
+TODO: make sure these code snippets are correct
+
+<CodeGroup>
+
+```js React
+import { useConnect, Config } from 'pelm-connect';
+
+function App() {
+  const config: Config = {
+    // TODO: code for fetching connect_token
+    connectToken: 'YOUR_CONNECT_TOKEN',
+    onSuccess: (authorizationCode: string) => {...},
+    onExit: (status: string, metadata: any) => {...}
+  }
+
+  const { open, ready, error } = useConnect(config);
+
+  return <button
+      type="button"
+      className="button"
+      onClick={() => open()}
+      disabled={!ready}
+  >
+    Connect your utility
+  </button>
+}
+```
+
+```html HTML/JS
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Pelm Connect Javascript Demo</title>
+        <script src="https://cdn.pelm.com/initialize.js"></script>
+        <script defer>
+            (async () => {
+                // Create a connect token using client credentials in order to initiate the Connect Flow.
+                const generateConnectToken = () => {
+                  // Step 1
+                };
+
+                const connectToken = await generateConnectToken();
+                // This is the callback that is called when your User successfully connects their utility account.
+                const onSuccess = (authorizationCode) => {
+                  // Step 3
+                };
+
+                // This is the callback that is called when Connect is exited but the user has not successfully connected their utility account.
+                onExit = (status, metadata) => {};
+
+                // The config is used to specify your Connect Token and callbacks for the success and exit cases.
+                const config = {
+                    connectToken,
+                    onSuccess,
+                    onExit,
+                };
+                const handler = window.PelmConnect.create(config);
+
+                const connectUtilityButton = document.getElementById('connect-utility-button');
+                connectUtilityButton.disabled = false;
+                connectUtilityButton.addEventListener('click', (event) => {
+                    handler.open();
+                });
+            })();
+        </script>
+    </head>
+    <body>
+        <h1>Pelm Connect Javascript Demo</h1>
+        <button id="connect-utility-button" disabled>Connect utility</button>
+    </body>
+</html>
+```
+</CodeGroup>
+
+## 3. Backend - exchange authorization_code for access_token
+The final step is exchanging the `authorization_code` you received in the previous step for an `access_token` via `POST /auth/token`. TODO: link to API reference
+
+// TODO: refersh code snippets
+<CodeGroup>
+
+```js Node
+// imports?
+
+app.post('/authorization', async (req, res) => {
+
+  const headers = new Headers();
+  headers.set('Pelm-Client-Id', PELM_CLIENT_ID);
+  headers.set('Pelm-Secret', PELM_SECRET);
+
+  const encodedParams = new URLSearchParams();
+  encodedParams.set('code', req.body.authorizationCode);
+
+  const requestOptions = {
+    method: 'POST',
+    headers,
+    body: encodedParams,
+  };
+
+  const response = await fetch('https://api.pelm.com/auth/token', requestOptions);
+  const data = await response.json();
+  const accessToken = data.access_token;
+  // Save accessToken to database
+})
+```
+
+```bash cURL
+curl --data "code={AUTHORIZATION_CODE}&grant_type=code" https://api.pelm.com/tokens -H "Pelm-Client-Id: YOUR_CLIENT_ID" -H "Pelm-Secret: YOUR_CLIENT_SECRET"
+```
+</CodeGroup>
+
+You should receive a response that looks like this.
+
+```json JSON
+{
+  "access_token": "57f20230-4ee7-11ec-9b0c-acde48001122",
+  "access_token_expires_in": 3600,  // ignore this
+  "refresh_token": "aea9b417e72b3978c5bfcd0782c3a486ec63abf5e85ce9a62ba36d1b18b12488",  // ignore this
+  "refresh_token_expires_in": 1314000  // ignore this
+}
+```
+
+<Info>Note that the `access_token` **will not expire**. You should securely store this token in your database.</Info>
+<Warning>You can ignore all the other fields in this response: `access_token_expires_in`, `refresh_token`, `refresh_token_expires_in`. They're included for legacy applications.</Warning>
+
+
+## 4. Make your first request
+
+Note that even if you saee the 500 you're still good. You can verify this by making the same request with a different access token and verif.
+
+// TODO: snippet for /accounts
+// TODO: show entire file examples
+
+
+## Next steps
+
+Now that you have your `access_token`, you can start making requests for your user's data. Request your user's accounts via [/accounts](https://pelm.readme.io/reference/get%5Faccounts).

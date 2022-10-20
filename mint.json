@@ -41,31 +41,35 @@
   },
   "navigation": [
     {
-      "group": "Introduction",
+      "group": "Home",
       "pages": [
-        "welcome",
-        "basic-concepts",
-        "getting-started",
-        "sandbox-user",
-        "quickstart-app"
+        "welcome"
       ]
     },
     {
-      "group": "Connect",
+      "group": "Guides",
       "pages": [
-        "reference/connect/overview",
-        "reference/connect/embedding-connect",
-        "reference/connect/redirecting-to-connect"
+        "getting-started-2",
+        "basic-concepts-2",
+        "connect-guide"
       ]
     },
     {
       "group": "Reference",
       "pages": [
-        "reference/user-authorization",
-        "reference/data-availability",
         "reference/utilities",
+        "reference/sandbox-user"
+      ]
+    },
+    {
+      "group": "Reference",
+      "pages": [
+        "reference/utilities",
+        "reference/sandbox-user",
+        "reference/data-availability",
         "reference/unit-codes",
-        "reference/errors"
+        "reference/errors",
+        "quickstart-app"
       ]
     },
     {
