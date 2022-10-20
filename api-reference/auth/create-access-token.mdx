@@ -6,9 +6,8 @@ contentType: "application/x-www-form-urlencoded"
 
 Exchange an `authorization_code` for an `access-token`. The `authorization_code` is returned in the Connect `onSuccess` callback after the user successfully submits their utility credentials.
 
-The `access_token` will not expire. Make sure you securely store it in your database so you can make future requests for the given user.
-
-The fields `access_token_expires_in`, `refresh_token`, and `refresh_token_expires_in` can be ignored. These are included for applications using our legacy authorization framework.
+<Info>Note that the `access_token` **will not expire**. You should securely store this token in your database.</Info>
+<Warning>You can ignore all the other fields in this response: `access_token_expires_in`, `refresh_token`, `refresh_token_expires_in`. They're included for legacy applications.</Warning>
 
 ### Form data
 
@@ -50,3 +49,15 @@ curl --request POST \
 <ResponseField name="refresh_token_expires_in" type="string">
   number of seconds until refresh_token expires (1 year)
 </ResponseField>
+
+<ResponseExample>
+```json Response
+{
+  "access_token": "ACCESS_TOKEN",
+  "access_token_expires_in": 3600,  // ignore this field
+  "refresh_token": "REFRESH_TOKEN",  // ignore this field
+  "refresh_token_expires_in": 31536000  // ignore this field
+}
+```
+
+</ResponseExample>

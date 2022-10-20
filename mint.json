@@ -62,19 +62,13 @@
       ]
     },
     {
-      "group": "Reference",
-      "pages": [
-        "reference/utilities",
-        "reference/sandbox-user",
-        "reference/data-availability",
-        "reference/unit-codes",
-        "reference/errors",
-        "quickstart-app"
-      ]
-    },
-    {
       "group": "Pelm API",
-      "pages": ["api-reference/overview"]
+      "pages": [
+        "api-reference/overview",
+        "api-reference/errors",
+        "api-reference/unit-codes"
+        
+      ]
     },
     {
       "group": "Users",
@@ -85,7 +79,9 @@
     },
     {
       "group": "Accounts",
-      "pages": ["api-reference/accounts/get-energy-accounts"]
+      "pages": [
+        "api-reference/accounts/get-energy-accounts"
+      ]
     },
     {
       "group": "Usage",

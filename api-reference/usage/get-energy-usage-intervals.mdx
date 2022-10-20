@@ -121,3 +121,51 @@ curl --request GET \
     </ResponseField>
   </Expandable>
 </ResponseField>
+
+<ResponseExample>
+```json Response
+{
+    "utility": "Pacific Gas and Electric",
+    "type": "ELECTRIC",
+    "account": {
+        "id": "ea100000-0000-0000-0000-000000000000",
+        "account_number": "1077345636",
+        "address": "1 WARRIORS WAY SAN FRANCISCO CA 94158",
+        "available_meter_types": [
+            "ELECTRIC",
+            "GAS"
+        ],
+        "usage_unit": "kwh",
+        "has_solar": null,
+        "gas_usage_unit": "therm",
+        "ghg_emissions_unit": "kg_co2e"
+    },
+    "intervals": [
+        {
+            "start": 1661882400,
+            "end": 1661886000,
+            "usage": 0.683,
+            "consumption": null,
+            "generation": null,
+            "ghg_emissions": 0.11972295276719513
+        },
+        {
+            "start": 1661886000,
+            "end": 1661889600,
+            "usage": 1.04,
+            "consumption": null,
+            "generation": null,
+            "ghg_emissions": 0.1741115822732186
+        },
+        {
+            "start": 1661889600,
+            "end": 1661893200,
+            "usage": 3.875,
+            "consumption": null,
+            "generation": null,
+            "ghg_emissions": 0.5348086627417998
+        }
+    ]
+}
+```
+</ResponseExample>
