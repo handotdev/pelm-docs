@@ -1,28 +1,28 @@
 ---
 title: "Get User"
-description: "Get details for a user."
+description: "Get details for a `User`."
 api: "GET /users/{user_id}"
 ---
 
 ### Path Params
 
 <ParamField path="user_id" type="string" required>
-  user_id for user that you submitted when you first created a Connect Token for
-  this user.
+  `user_id` for the user that you submitted when you first created a Connect Token for
+  this user
 </ParamField>
 
 ### Headers
 
 <ParamField header="Authorization" type="string" required>
-  access_token passed as "Bearer \{access_token}"
+  `access_token` passed as "Bearer \{access_token}"
 </ParamField>
 
 <ParamField header="Pelm-Client-Id" type="string" required>
-  Pelm-Client-Id given to a developer when they register
+  `Pelm-Client-Id` given on registration
 </ParamField>
 
 <ParamField header="Pelm-Secret" type="string" required>
-  Pelm-Secret given to a developer when they register
+  `Pelm-Secret` given on registration
 </ParamField>
 
 <RequestExample>
@@ -38,8 +38,8 @@ curl --request GET \
 ### Response
 
 <ResponseField name="id" type="string">
-  This is the id specified by you when you initially created the Connect Token
-  to connect this user's utility account.
+  The id you specified when you initially created the Connect Token
+  to connect this user's utility account
 </ResponseField>
 
 <ResponseField name="utility" type="object">
@@ -50,18 +50,18 @@ curl --request GET \
 </ResponseField>
 
 <ResponseField name="utility_username" type="string">
-  This is the id specified by you when you initially created the Connect Token
-  to connect this user's utility account.
+  The id you specified when you initially created the Connect Token
+  to connect this user's utility account
 </ResponseField>
 
 <ResponseField name="credentials_valid" type="boolean">
 
-Boolean field indicating whether the credentials we have for this User are
-valid. A common scenario that would cause this field to become false is the
-User changing their password.
+A boolean field indicating whether the credentials we have for this `User` are
+valid
 
-If this field is false, then we're unable to
-pull the latest data for this User, and your User needs to go through the
+A common scenario that would cause this field to be false is the
+`User` changing their password. If this field is false, then we're unable to
+pull the latest data for this `User` and your user needs to go through the
 Connect flow again.
 
 </ResponseField>

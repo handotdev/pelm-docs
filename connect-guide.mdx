@@ -9,7 +9,7 @@ The Connect flow consists of the following screens:
 1. Welcome Screen - User gains context on Pelm and Connect
 2. Utility Selection Screen - User selects their Utility
 3. Credentials Screen - User inputs their credentials
-4. MFA Screen - only shown for utilities that require multi-factor authentication
+4. MFA Screen - Only shown for utilities that require multi-factor authentication
 
 
 ## Setting up Connect
@@ -35,7 +35,7 @@ npm install react-pelm-connect
 </CodeGroup>
 
 
-## 1. Backend - create connect_token
+## 1. Backend - Create a connect_token
 
 The first step is creating a Connect token. This is an extra security measure that abstracts away information like your `Pelm-Secret` and `user_id` from the web client.
 
@@ -80,7 +80,7 @@ curl -X POST https://api.pelm.com/auth/connect-token -H "Pelm-Client-Id: {CLIENT
 </CodeGroup>
 
 
-## 2. Frontend - initialize Connect
+## 2. Frontend - Initialize Connect
 
 Initialize and open Connect on your frontend.
 
@@ -93,8 +93,6 @@ Pass your `connect_token` and callbacks to Connect via a config object.
 | connectToken  | `string`                               | Token generated in step #1. |
 | onSuccess     | `(authorizationCode: string) => {}`     | Called when your User successfully connects their Utility login. |
 | onExit        | `(status: string, metadata: any) => {}` | Called when Connect is exited. |
-
-// TODO: somewhere that links to status
 
 #### Open Connect
 
@@ -173,7 +171,7 @@ function App() {
 ```
 </CodeGroup>
 
-## 3. Backend - exchange authorization_code for access_token
+## 3. Backend - Exchange authorization code for access token
 The final step is exchanging the `authorization_code` you received in the previous step for an `access_token` via [`POST /auth/token`]().
 
 <CodeGroup>
@@ -234,17 +232,17 @@ This may return the following `500` response:
 }
 ```
 
-Wait around one minute and try again.
+If this happens, wait around one minute and try again.
 
 Note that receiving this response implies that you've successfully created an `access_token`. 
 You can verify this by making the same request with an invalid `access_token` and receiving a `credentials_invalid` response.
 
 ## More Connect nuances
 Connect has two modes: `create` or `update`. 
-- `create` mode is used for creating new `User`s. Your user will screen all of the screens listed above.
-- `update` mode used to update existing `User`s that have changed their utility password. Your user will start the flow at the Credentials Screen.
+- `create` mode is used for creating new `User`s. Your user will see all of the screens listed above.
+- `update` mode is used to update existing `User`s that have changed their utility password. Your user will start the flow at the Credentials Screen.
 
-The flow is determined by the `user_id` value you pass when creating a `connect_token`.
+The flow is determined by the `user_id` value you pass when creating a `connect_token`. We will automatically determine which flow should be shown based on our records for the user.
 
 If you submit a new `user_id` for a user that has already connected their account with you, your previously submitted `user_id` will be overwritten by the new value. Make sure you change this appropriately in your records.
 

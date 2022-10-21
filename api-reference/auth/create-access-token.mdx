@@ -4,7 +4,7 @@ api: "POST /auth/token"
 contentType: "application/x-www-form-urlencoded"
 ---
 
-Exchange an `authorization_code` for an `access-token`. The `authorization_code` is returned in the Connect `onSuccess` callback after the user successfully submits their utility credentials.
+Exchange an `authorization_code` for an `access_token`. The `authorization_code` is returned in the Connect `onSuccess` callback after the user successfully submits their utility credentials.
 
 <Info>Note that the `access_token` **will not expire**. You should securely store this token in your database.</Info>
 <Warning>You can ignore all the other fields in this response: `access_token_expires_in`, `refresh_token`, `refresh_token_expires_in`. They're included for legacy applications.</Warning>
@@ -12,17 +12,17 @@ Exchange an `authorization_code` for an `access-token`. The `authorization_code`
 ### Form data
 
 <ParamField body="code" type="string" required>
-  authorization code from Connect.
+  Authorization code from Connect.
 </ParamField>
 
 ### Headers
 
 <ParamField header="Pelm-Client-Id" type="string" required>
-  Pelm-Client-Id given to a developer when they register
+  `Pelm-Client-Id` given on registration
 </ParamField>
 
 <ParamField header="Pelm-Secret" type="string" required>
-  Pelm-Secret given to a developer when they register
+  `Pelm-Secret` given on registration
 </ParamField>
 
 <RequestExample>
@@ -41,13 +41,13 @@ curl --request POST \
 <ResponseField name="access_token" type="string"></ResponseField>
 
 <ResponseField name="access_token_expires_in" type="string">
-  number of seconds until access_token expires (1 hour)
+  Number of seconds until the `access_token` expires (1 hour)
 </ResponseField>
 
 <ResponseField name="refresh_token" type="string"></ResponseField>
 
 <ResponseField name="refresh_token_expires_in" type="string">
-  number of seconds until refresh_token expires (1 year)
+  Number of seconds until the `refresh_token` expires (1 year)
 </ResponseField>
 
 <ResponseExample>
