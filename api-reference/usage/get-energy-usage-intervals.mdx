@@ -1,12 +1,12 @@
 ---
 title: "Get Energy Usage Intervals"
-description: "Get a list of interval objects corresponding to energy usage and greenhouse gas emissions for a given `EnergyAccount` in a specific time range. Emissions data is currently only available for PG&E and SCE."
+description: "Get a list of interval objects corresponding to energy usage and greenhouse gas emissions for a given `Account` in a specific time range. Emissions data is currently only available for PG&E and SCE."
 api: "GET /intervals"
 ---
 
 The type of energy (gas vs. electric) is specified in the `type` query param. Information on whether this account has electricity and/or gas data is found in the `available_meter_type` field of the `Account` object, which can be queried via `/accounts`.
 
-Timestamps are in UNIX time, usage is in the unit specified by the `usage_unit` for that account (otherwise kWh/therms if no unit is specified), and emissions is in kgCO2e (kg of carbon dioxide equivalent).
+Timestamps are in UNIX time, usage is in the unit specified by the `usage_unit` for that `Account` (otherwise kWh/therms if no unit is specified), and emissions is in kgCO2e (kg of carbon dioxide equivalent).
 
 If neither `start_date` nor `end_date` are provided, the response will include usage data for the last two months.
 

@@ -7,7 +7,7 @@ description: "Get all `Bill`s for all `Account`s for the given `User`, ordered b
 ### Query Params
 
 <ParamField query="account_id" type="string">
-  Optional field specifying the `EnergyAccount` to query `Bill`s for. If omitted, `Bill`s for
+  Optional field specifying the `Account` to query `Bill`s for. If omitted, `Bill`s for
   all accounts under this `User` will be returned. `account_id`'s are returned in
   the `/accounts` response.
 </ParamField>
@@ -39,11 +39,11 @@ curl --request GET \
 ### Response
 
 <ResponseField name="account_id" type="string">
-  ID of `EnergyAccount` that bills belong to
+  ID of the `Account` that the `Bill`s belong to
 </ResponseField>
 
 <ResponseField name="bills" type="array of objects">
-  `Bill` objects for the `EnergyAccount`
+  `Bill` objects for the `Account`
   <Expandable>
     <ResponseField name="id" type="string" />
     <ResponseField name="account_id" type="string" />
