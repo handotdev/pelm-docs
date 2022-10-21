@@ -81,3 +81,112 @@ curl --request GET \
     <ResponseField name="gas_usage_therm" type="number" />
   </Expandable>
 </ResponseField>
+
+<ResponseExample>
+```json Response
+[
+  {
+      "account_id": "ea100000-0000-0000-0000-000000000000",
+      "bills": [
+          {
+              "id": "b1100000-0000-0000-0000-000000000000",
+              "account_id": "ea100000-0000-0000-0000-000000000000",
+              "bill_number": "1100000",
+              "start_date": 1641859200,
+              "end_date": 1644451200,
+              "statement_date": 1644537600,
+              "due_date": 1645660800,
+              "payment_date": null,
+              "total_amount_due": 28.05,
+              "total_charges": null,
+              "charges": {
+                  "electric_charges": 25.05,
+                  "supplier_electric_charges": null,
+                  "gas_charges": 2.0,
+                  "supplier_gas_charges": null,
+                  "other_charges": 1.0
+              },
+              "electric_usage_kwh": null,
+              "gas_usage_therm": null,
+              "electricity_consumption_kwh": null,
+              "electricity_generation_kwh": null
+          },
+          {
+              "id": "b1200000-0000-0000-0000-000000000000",
+              "account_id": "ea100000-0000-0000-0000-000000000000",
+              "bill_number": "12000000",
+              "start_date": 1670716800,
+              "end_date": 1641772800,
+              "statement_date": 1641859200,
+              "due_date": 1645660800,
+              "payment_date": null,
+              "total_amount_due": 28.05,
+              "total_charges": null,
+              "charges": {
+                  "electric_charges": 25.05,
+                  "supplier_electric_charges": null,
+                  "gas_charges": 2.0,
+                  "supplier_gas_charges": null,
+                  "other_charges": 1.0
+              },
+              "electric_usage_kwh": null,
+              "gas_usage_therm": null,
+              "electricity_consumption_kwh": null,
+              "electricity_generation_kwh": null
+          }
+      ]
+  },
+  {
+      "account_id": "ea200000-0000-0000-0000-000000000000",
+      "bills": [
+          {
+              "id": "b2100000-0000-0000-0000-000000000000",
+              "account_id": "ea200000-0000-0000-0000-000000000000",
+              "bill_number": "21000000",
+              "start_date": 1641859200,
+              "end_date": 1644451200,
+              "statement_date": 1644537600,
+              "due_date": 1645660800,
+              "payment_date": null,
+              "total_amount_due": 28.05,
+              "total_charges": null,
+              "charges": {
+                  "electric_charges": 25.05,
+                  "supplier_electric_charges": null,
+                  "gas_charges": 2.0,
+                  "supplier_gas_charges": null,
+                  "other_charges": 1.0
+              },
+              "electric_usage_kwh": null,
+              "gas_usage_therm": null,
+              "electricity_consumption_kwh": null,
+              "electricity_generation_kwh": null
+          },
+          {
+              "id": "b2200000-0000-0000-0000-000000000000",
+              "account_id": "ea200000-0000-0000-0000-000000000000",
+              "bill_number": "22000000",
+              "start_date": 1670716800,
+              "end_date": 1641772800,
+              "statement_date": 1641859200,
+              "due_date": 1645660800,
+              "payment_date": null,
+              "total_amount_due": 28.05,
+              "total_charges": null,
+              "charges": {
+                  "electric_charges": 25.05,
+                  "supplier_electric_charges": null,
+                  "gas_charges": 2.0,
+                  "supplier_gas_charges": null,
+                  "other_charges": 1.0
+              },
+              "electric_usage_kwh": null,
+              "gas_usage_therm": null,
+              "electricity_consumption_kwh": null,
+              "electricity_generation_kwh": null
+          }
+      ]
+  }
+]
+```
+</ResponseExample>

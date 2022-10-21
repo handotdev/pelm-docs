@@ -71,3 +71,34 @@ curl --request GET \
 ```
 
 </RequestExample>
+
+<ResponseExample>
+```json Response
+{
+    "utility_id": 1,
+    "ghg_emission_rate_unit": "kg_co2e_per_kwh",
+    "intervals": [
+        {
+            "start": 1666248000,
+            "end": 1666248300,
+            "ghg_emission_rate": 0.362484056122449
+        },
+        {
+            "start": 1666248300,
+            "end": 1666248600,
+            "ghg_emission_rate": 0.3631515637530072
+        },
+        {
+            "start": 1666248600,
+            "end": 1666248900,
+            "ghg_emission_rate": 0.363086355019562
+        },
+        {
+            "start": 1666248900,
+            "end": 1666249200,
+            "ghg_emission_rate": 0.36657451825351656
+        }
+    ]
+}
+```
+</ResponseExample>

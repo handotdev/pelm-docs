@@ -1,0 +1,56 @@
+---
+title: "Core Concepts"
+---
+
+## Core Objects
+#### User
+
+The `User` model corresponds to a utility login. If your user has multiple utility logins, such as a SCE login and SoCalGas login, they must go through the [Connect](https://pelm.readme.io/reference/overview) flow multiple times. Each of these utility logins will be associated with a Pelm `User`, i.e. your user might have multiple different Pelm `User`s.
+
+#### Account
+
+The `Account` model corresponds to an account under a utility login. There is typically a one-to-one mapping of `Account` to property. If a user has a residential home and a vacation home, these would correspond to two different `Account` objects.
+
+Usage intervals and bills are queried per `Account`.
+
+#### Common scenarios
+
+Bob owns three houses in the Bay Area. PG&E serves gas and electricity for each of his houses. Bob would need to go through the Connect flow once. Bob is associated with one `User` with three different `Account`s.
+
+Alice rents an apartment in Southern California. SCE provides her electricity and SoCalGas provides her gas. Alice would need to go through the Connect flow twice. Alice is associated with two `User`s, each with one `Account`.
+
+## Authorization
+Accessing user data.
+
+#### Access Token
+The `access_token` grants you access to Alice's (and only Alice's) data. When making requests for Alice's data, the `access_token` must be passed in the `Authorization` header as `Bearer {{access_token}}`.
+
+The `access_token` will not expire. Make sure you securely store it in your database.
+
+#### Connect
+
+Connect is a UI component provded by Pelm that allows your users to seamlessly and securely connect their utility login.
+
+
+
+![Screenshot](/docs/images/reference/screenshot.png)
+
+## Polling data
+
+We require a few minutes to sync a User's data after they go through Connect for the first time.
+
+During that period, our endpoints may return the following `500` response:
+
+```json
+{
+  "error_code": "data_unavailable",
+  "message": "We're currently loading data for this account, please try again in 5 minutes."
+}
+```
+
+We recommend polling our endpoints.
+
+Coming soon: webhooks.
+
+
+

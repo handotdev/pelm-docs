@@ -1,0 +1,2691 @@
+openapi: 3.0.0
+info:
+  description: Pelm's developer API
+  version: "1.0.0"
+  title: Pelm API
+  contact:
+    email: info@pelm.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+servers:
+  - description: Pelm API
+    url: https://api.pelm.com
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/pelm1/pelm/1.0.0
+
+tags:
+  - name: Users
+    description: Your users. Each User is equivalent to a utility login. If your user has a PG&E login and an SCE login, they will be treated as two separate Users.
+  - name: Accounts
+    description: Accounts under a single utility login.
+  - name: Usage
+    description: Electricity usage intervals.
+  - name: Bills
+    description: Utility billing data.
+  - name: Payment Methods
+    description: Payment methods on file for a utility login.
+  - name: Emission Rates
+    description: Emission rates for a given utility.
+  - name: Auth
+    description: Authorization endpoints
+
+
+paths:
+  '/users/{user_id}':
+    get:
+      tags:
+        - Users
+      summary: Get user
+      description: Get details for a user.
+      parameters:
+        - name: user_id
+          in: path
+          description: user_id for user that you submitted when you first created a Connect Token for this user.
+          required: true
+          schema:
+            type: string
+            format: string
+        - name: Authorization
+          in: header
+          description: access_token passed as "Bearer {access_token}"
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Client-Id
+          in: header
+          description: Pelm-Client-Id given to a developer when they register
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Secret
+          in: header
+          description: Pelm-Secret given to a developer when they register
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              example:
+                id: "1234"
+                utility:
+                  id: 1
+                  full_name: "Pacific Gas and Electric"
+                utility_username: "kanye@gmail.com"
+                credentials_valid: true
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '402':
+          description: Quota reached
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '403':
+          description: Permission denied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+
+    delete:
+      tags:
+        - Users
+      summary: Delete user
+      description: Revoke your authorization to this user's data and delete their data from Pelm. You won't be charged for making this request.
+      parameters:
+        - name: user_id
+          in: path
+          description: user_id for user that you submitted when you first created a Connect Token for this user.
+          required: true
+          schema:
+            type: string
+            format: string
+        - name: Authorization
+          in: header
+          description: access_token passed as "Bearer {access_token}"
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Client-Id
+          in: header
+          description: Pelm-Client-Id given to a developer when they register
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Secret
+          in: header
+          description: Pelm-Secret given to a developer when they register
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: Successfully deleted user
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '402':
+          description: Quota reached
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '403':
+          description: Permission denied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+
+  '/accounts':
+    get:
+      tags:
+        - Accounts
+      summary: Get energy accounts
+      description: Get a list of energy account ids that are tied to a given user.
+
+
+        Note that this endpoint was previously named '/users/{user_id}/accounts', which is still live (user_id is the id you submitted for the user that you submitted when you initialized a Connect Token).
+      parameters:
+        - name: Authorization
+          in: header
+          description: access_token passed as "Bearer {access_token}"
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Client-Id
+          in: header
+          description: Pelm-Client-Id given to a developer when they register
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Secret
+          in: header
+          description: Pelm-Secret given to a developer when they register
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: Successful operation
+          content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Account'
+
+                example:
+                  - id: "b5d64e61-4d05-4dde-ab85-cfd071024b81"
+                    account_number: "5777345636"
+                    address: "1 WARRIORS WAY SAN FRANCISCO CA 94158"
+                    available_meter_types: ["ELECTRIC", "GAS"]
+                    usage_unit: "kwh"
+                    gas_usage_unit: "therm"
+                    ghg_emissions_unit: "kg_co2e"
+                  - id: "d9a14c1c-746b-43fc-83f2-e93b6f94f05d"
+                    account_number: "8011757182"
+                    address: "1 FERRY BUILDING SAN FRANCISCO CA 94105"
+                    available_meter_types: ["ELECTRIC"]
+                    usage_unit: "kwh"
+                    ghg_emissions_unit: "kg_co2e"
+                    unit: "kwh"
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '402':
+          description: Quota reached
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '403':
+          description: Permission denied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+
+
+  '/service/initiate-stop':
+    post:
+      tags:
+        - Service
+      summary: Initiate a stop of service
+      description:
+        Initiates a stop of utility service for a given energy account.
+
+        If the optional query parameters of `email`, `phone_number`, and `mailing_address` are specified, they will be used as the new contact information. Otherwise, the default information on file will be used.
+      parameters:
+        - name: Authorization
+          in: header
+          description: access_token passed as "Bearer {access_token}"
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Client-Id
+          in: header
+          description: Pelm-Client-Id from registration
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Secret
+          in: header
+          description: Pelm-Secret from registration
+          required: true
+          schema:
+            type: string
+        - name: stop_address
+          in: query
+          description: Address at which service should be stopped. Formatted as 1 Warriors Way, San Francisco, CA 94158.
+          required: true
+          schema:
+            type: string
+        - name: stop_date
+          in: query
+          description: Date on which service should stop. Formatted as yyyy-mm-dd.
+          required: true
+          schema:
+            type: string
+        - name: email
+          in: query
+          description: Email to be used for contact. If not provided, default email on file is used.
+          required: false
+          schema:
+            type: string
+        - name: phone_number
+          in: query
+          description: Phone number to be used for contact. If not provided, default phone number on file is used.
+          required: false
+          schema:
+            type: string
+        - name: mailing_address
+          in: query
+          description: Address to be used for contact. If not provided, default address on file is used.
+          required: false
+          schema:
+            type: string
+
+      responses:
+          '200':
+            description: Successfully initiated a stop of service
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    job_id:
+                      type: string
+          '400':
+            description: Client error
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error_code:
+                      type: string
+                    message:
+                      type: string
+          '401':
+            description: Unauthorized
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error_code:
+                      type: string
+                    message:
+                      type: string
+          '403':
+            description: Permission denied
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error_code:
+                      type: string
+                    message:
+                      type: string
+          '500':
+            description: Server error
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error_code:
+                      type: string
+                    message:
+                      type: string
+
+  '/service/initiate-transfer':
+    post:
+      tags:
+        - Service
+      summary: Initiate a transfer of service
+      description:
+       Initiates a transfer of utility service from one address to another for a given energy account.
+
+        If the optional query parameters of `email`, `phone_number`, and `mailing_address` are specified, they will be used as the new contact information. Otherwise, the default information on file will be used.
+      parameters:
+        - name: Authorization
+          in: header
+          description: access_token passed as "Bearer {access_token}"
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Client-Id
+          in: header
+          description: Pelm-Client-Id from registration
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Secret
+          in: header
+          description: Pelm-Secret from registration
+          required: true
+          schema:
+            type: string
+        - name: stop_date
+          in: query
+          description: Date on which service at the old address should stop. Formatted as yyyy-mm-dd.
+          required: true
+          schema:
+            type: string
+        - name: start_date
+          in: query
+          description: Date on which service at the new address should start. Formatted as yyyy-mm-dd.
+          required: true
+          schema:
+            type: string
+        - name: stop_address
+          in: query
+          description: Address from which service should be transferred. Formatted as 1 Warriors Way, San Francisco, CA 94158.
+          required: true
+          schema:
+            type: string
+        - name: start_address
+          in: query
+          description: Address to which service should be transferred. Formatted as 1 Warriors Way, San Francisco, CA 94158.
+          required: true
+          schema:
+            type: string
+        - name: email
+          in: query
+          description: Email to be used for contact. If not provided, default email on file is used.
+          required: false
+          schema:
+            type: string
+        - name: phone_number
+          in: query
+          description: Phone number to be used for contact. If not provided, default phone number on file is used.
+          required: false
+          schema:
+            type: string
+        - name: mailing_address
+          in: query
+          description: Address to be used for contact. If not provided, default address on file is used.
+          required: false
+          schema:
+            type: string
+        - name: paperless_opt_out
+          in: query
+          description: Whether or not an opt out of paperless communication is desired.
+          required: false
+          schema:
+            type: boolean
+
+      responses:
+            '200':
+              description: Successfully initiated a transfer of service
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      job_id:
+                        type: string
+            '400':
+              description: Client error
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      error_code:
+                        type: string
+                      message:
+                        type: string
+            '401':
+              description: Unauthorized
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      error_code:
+                        type: string
+                      message:
+                        type: string
+            '403':
+              description: Permission denied
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      error_code:
+                        type: string
+                      message:
+                        type: string
+            '500':
+              description: Server error
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      error_code:
+                        type: string
+                      message:
+                        type: string
+
+  '/service/initiate-start':
+    post:
+      tags:
+        - Service
+      summary: Initiate a start of service
+      description:
+        Initiates a start utility service at a new address for a given energy account.
+
+        If the optional query parameters of `email`, `phone_number`, and `mailing_address` are specified, they will be used as the new contact information. Otherwise, the default information on file will be used.
+      parameters:
+        - name: Authorization
+          in: header
+          description: access_token passed as "Bearer {access_token}"
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Client-Id
+          in: header
+          description: Pelm-Client-Id from registration
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Secret
+          in: header
+          description: client_secret from registration
+          required: true
+          schema:
+            type: string
+        - name: account_number
+          in: query
+          description: Account number for which to start service
+          required: false
+          schema:
+            type: string
+        - name: start_date
+          in: query
+          description: Date on which service at the new address should start. Formatted as yyyy-mm-dd.
+          required: true
+          schema:
+            type: string
+        - name: start_address
+          in: query
+          description: Address at which service should be started. Formatted as 1 Warriors Way, San Francisco, CA 94158.
+          required: true
+          schema:
+            type: string
+        - name: email
+          in: query
+          description: Email to be used for contact. If not provided, default email on file is used.
+          required: false
+          schema:
+            type: string
+        - name: phone_number
+          in: query
+          description: Phone number to be used for contact. If not provided, default phone number on file is used.
+          required: false
+          schema:
+            type: string
+        - name: mailing_address
+          in: query
+          description: Address to be used for contact. If not provided, default address on file is used.
+          required: false
+          schema:
+            type: string
+        - name: paperless_opt_out
+          in: query
+          description: Whether or not an opt out of paperless communication is desired.
+          required: false
+          schema:
+            type: boolean
+
+      responses:
+          '200':
+            description: Successfully initiated a start of service
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    job_id:
+                      type: string
+          '400':
+            description: Client error
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error_code:
+                      type: string
+                    message:
+                      type: string
+          '401':
+            description: Unauthorized
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error_code:
+                      type: string
+                    message:
+                      type: string
+          '403':
+            description: Permission denied
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error_code:
+                      type: string
+                    message:
+                      type: string
+          '500':
+            description: Server error
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error_code:
+                      type: string
+                    message:
+                      type: string
+
+
+  '/login-info/update':
+    post:
+      tags:
+        - Login Info
+      summary: Update login info
+      description:
+        Updates the login info (username, password, security question, security answer) of the user.
+
+        None of the login info fields are explicitly required, but if at least one field isn't given the API will return an error.
+      parameters:
+        - name: Authorization
+          in: header
+          description: access_token passed as "Bearer {access_token}"
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Client-Id
+          in: header
+          description: Pelm-Client-Id from registration
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Secret
+          in: header
+          description: Pelm-Secret from registration
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                new_username:
+                  type: string
+                  description: New username
+                new_password:
+                  type: string
+                  description: New password
+                new_challenge_question:
+                  type: string
+                  description: New challenge question
+                new_challenge_answer:
+                  type: string
+                  description: New challenge answer
+      responses:
+          '200':
+            description: Successfully updated login info
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    new_info:
+                      type: object
+                      properties:
+                        username:
+                          type: string
+                          description: Updated username
+                        challenge_question:
+                          type: string
+                          description: Updated challenge question
+                        challenge_answer:
+                          type: string
+                          description: Updated challenge answer
+                    old_info:
+                      type: object
+                      properties:
+                        username:
+                          type: string
+                          description: Previous username
+                        challenge_question:
+                          type: string
+                          description: Previous challenge question
+                        challenge_answer:
+                          type: string
+                          description: Previous challenge answer
+          '400':
+            description: Client error
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error_code:
+                      type: string
+                    message:
+                      type: string
+          '401':
+            description: Unauthorized
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error_code:
+                      type: string
+                    message:
+                      type: string
+          '403':
+            description: Permission denied
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error_code:
+                      type: string
+                    message:
+                      type: string
+          '500':
+            description: Server error
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error_code:
+                      type: string
+                    message:
+                      type: string
+
+  '/account-contact-info/update':
+    post:
+      tags:
+        - Account Info
+      summary: Update account contact info
+      description:
+        Updates the contact info (email, phone number) of the utility account.
+      parameters:
+        - name: Authorization
+          in: header
+          description: access_token passed as "Bearer {access_token}"
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Client-Id
+          in: header
+          description: Pelm-Client-Id from registration
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Secret
+          in: header
+          description: Pelm-Secret from registration
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  description: Either "add" or "delete"
+                account_number:
+                  type: string
+                  description: Utility account number
+                email_addresses:
+                  type: array
+                  description: New email addresses
+                phone_numbers:
+                  type: array
+                  description: New phone numbers
+      responses:
+          '200':
+            description: Successfully updated account contact info
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    added_emails:
+                      type: array
+                      description: New email addresses added
+                    added_phones:
+                      type: array
+                      description: New phone numbers added
+                    removed_emails:
+                      type: array
+                      description: Old email addressess removed
+                    removed_phones:
+                      type: array
+                      description: Old phone numbers removed
+          '400':
+            description: Client error
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error_code:
+                      type: string
+                    message:
+                      type: string
+          '401':
+            description: Unauthorized
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error_code:
+                      type: string
+                    message:
+                      type: string
+          '403':
+            description: Permission denied
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error_code:
+                      type: string
+                    message:
+                      type: string
+          '500':
+            description: Server error
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error_code:
+                      type: string
+                    message:
+                      type: string
+
+  '/account-contact-info':
+    get:
+      tags:
+        - Account Info
+      summary: Get account contact info
+      description:
+        Returns the contact info (email, phone number) of the utility account.
+      parameters:
+        - name: Authorization
+          in: header
+          description: access_token passed as "Bearer {access_token}"
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Client-Id
+          in: header
+          description: Pelm-Client-Id from registration
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Secret
+          in: header
+          description: Pelm-Secret from registration
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                account_number:
+                  type: string
+                  description: Utility account number
+      responses:
+          '200':
+            description: Successfully retrieved account contact info
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    emails:
+                      type: array
+                      description: Email addresses on file
+                    language_preference:
+                      type: string
+                      description: Language preference on file
+                    phones:
+                      type: array
+                      description: Phone numbers on file
+          '400':
+            description: Client error
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error_code:
+                      type: string
+                    message:
+                      type: string
+          '401':
+            description: Unauthorized
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error_code:
+                      type: string
+                    message:
+                      type: string
+          '403':
+            description: Permission denied
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error_code:
+                      type: string
+                    message:
+                      type: string
+          '500':
+            description: Server error
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error_code:
+                      type: string
+                    message:
+                      type: string
+
+
+  '/recurring-payment-info/update':
+    post:
+      tags:
+        - Account Info
+      summary: Update account recurring payment info
+      description:
+        Updates the recurring payment info of the utility account.
+      parameters:
+        - name: Authorization
+          in: header
+          description: access_token passed as "Bearer {access_token}"
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Client-Id
+          in: header
+          description: Pelm-Client-Id from registration
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Secret
+          in: header
+          description: Pelm-Secret from registration
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  description: Either "add" or "delete"
+                account_number:
+                  type: string
+                  description: Utility account number
+                recurring_payment_info:
+                  type: object
+                  description: Recurring payment info object
+                  properties:
+                    accountNumber:
+                      type: string
+                    endRecurringPaymentSetting:
+                      type: string
+                    fundingAcct:
+                      type: string
+                    fundingAcctType:
+                      type: string
+                    fundingId:
+                      type: integer
+                    maxAmount:
+                      type: number
+                    nickName:
+                      type: string
+                    noOfPayments:
+                      type: integer
+                    payMaximum:
+                      type: boolean
+                    recurringPayId:
+                      type: string
+                    recurringPaymentStartDate:
+                      type: string
+                    timing:
+                      type: string
+                    type:
+                      type: string
+      responses:
+          '200':
+            description: Successfully updated account recurring payment info
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    added_recurring_payment_info:
+                      type: array
+                      description: New recurring payment info added
+                    removed_recurring_payment_info:
+                      type: array
+                      description: Old recurring payment info removed
+          '400':
+            description: Client error
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error_code:
+                      type: string
+                    message:
+                      type: string
+          '401':
+            description: Unauthorized
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error_code:
+                      type: string
+                    message:
+                      type: string
+          '403':
+            description: Permission denied
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error_code:
+                      type: string
+                    message:
+                      type: string
+          '500':
+            description: Server error
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error_code:
+                      type: string
+                    message:
+                      type: string
+
+  '/recurring-payment-info':
+    get:
+      tags:
+        - Account Info
+      summary: Get account recurring payment info
+      description:
+        Returns the recurring payment info of the utility account.
+      parameters:
+        - name: Authorization
+          in: header
+          description: access_token passed as "Bearer {access_token}"
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Client-Id
+          in: header
+          description: Pelm-Client-Id from registration
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Secret
+          in: header
+          description: Pelm-Secret from registration
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                account_number:
+                  type: string
+                  description: Utility account number
+      responses:
+          '200':
+            description: Successfully retrieved account contact info
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    recurring_payment_info:
+                      type: object
+                      description: Recurring payment info object
+                      properties:
+                        accountNumber:
+                          type: string
+                        endRecurringPaymentSetting:
+                          type: string
+                        fundingAcct:
+                          type: string
+                        fundingAcctType:
+                          type: string
+                        fundingId:
+                          type: integer
+                        maxAmount:
+                          type: number
+                        nickName:
+                          type: string
+                        noOfPayments:
+                          type: integer
+                        payMaximum:
+                          type: boolean
+                        recurringPayId:
+                          type: string
+                        recurringPaymentStartDate:
+                          type: string
+                        timing:
+                          type: string
+                        type:
+                          type: string
+
+          '400':
+            description: Client error
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error_code:
+                      type: string
+                    message:
+                      type: string
+          '401':
+            description: Unauthorized
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error_code:
+                      type: string
+                    message:
+                      type: string
+          '403':
+            description: Permission denied
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error_code:
+                      type: string
+                    message:
+                      type: string
+          '500':
+            description: Server error
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error_code:
+                      type: string
+                    message:
+                      type: string
+
+  '/paperless-setting/update':
+    post:
+      tags:
+        - Account Info
+      summary: Update account paperless setting
+      description:
+        Updates the whether the utility account is opted in to paperless billing or not.
+      parameters:
+        - name: Authorization
+          in: header
+          description: access_token passed as "Bearer {access_token}"
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Client-Id
+          in: header
+          description: Pelm-Client-Id from registration
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Secret
+          in: header
+          description: Pelm-Secret from registration
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                account_number:
+                  type: string
+                  description: Utility account number
+                paperless_on:
+                  type: boolean
+                  description: Whether the account is opted into paperless billing or not
+      responses:
+          '200':
+            description: Successfully updated paperless setting
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    new_paperless_on:
+                      type: string
+                      description: New paperless billing opt in value
+                    old_paperless_on:
+                      type: string
+                      description: Old paperless billing opt in value
+          '400':
+            description: Client error
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error_code:
+                      type: string
+                    message:
+                      type: string
+          '401':
+            description: Unauthorized
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error_code:
+                      type: string
+                    message:
+                      type: string
+          '403':
+            description: Permission denied
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error_code:
+                      type: string
+                    message:
+                      type: string
+          '500':
+            description: Server error
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error_code:
+                      type: string
+                    message:
+                      type: string
+
+  '/intervals':
+    get:
+      tags:
+        - Usage
+      summary: Get energy usage intervals
+      description:
+        Get a list of interval objects corresponding to energy usage and green house gas emissions for a given energy account in a specific time range. Emissions data is currently only available for PG&E and SCE.
+
+
+        The type of energy intervals (gas vs. electric) is specified in the `type` query param. Information on whether this account has electricity and/or gas data is found in the `available_meter_type` field of the `Account` object, which can be queried via `/accounts`. Gas data is currently only available for PG&E.
+
+
+        Timestamp is in epoch time, usage is in units specified by the unit for that account (otherwise kWh or therms if no unit is specified), and emissions is in kgCO2e (kg of carbon dioxide equivalent).
+
+
+        If neither start_date nor end_date are provided, response will include usage data for the last two months.
+
+
+        If start_date is included but end_date is not, response will include usage data for two months starting at start_date.
+
+
+        If end_date is included but start_date is not, response will include usage data for two months ending at end_date.
+
+
+        Note that this endpoint was previously named '/accounts/{account_id}/intervals', which is still live.
+
+      parameters:
+        - name: Authorization
+          in: header
+          description: access_token passed as "Bearer {access_token}"
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Client-Id
+          in: header
+          description: Pelm-Client-Id from registration
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Secret
+          in: header
+          description: Pelm-Secret from registration
+          required: true
+          schema:
+            type: string
+        - name: account_id
+          in: query
+          description: Energy account id to query usage intervals for. account_id's are returned in the [/accounts](https://pelm.readme.io/reference/get_accounts) response.
+          required: true
+          schema:
+            type: string
+        - name: type
+          in: query
+          schema:
+            $ref: '#/components/schemas/MeterType'
+          description: Must be either `ELECTRIC` or `GAS`. Defaults to `ELECTRIC` if omitted.
+        - name: start_date
+          in: query
+          description: Start date of desired intervals in UNIX time
+          schema:
+            type: integer
+            format: int64
+        - name: end_date
+          in: query
+          description: End date of desired intervals in UNIX time
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  utility:
+                    type: string
+                    description: Full name of utility
+                  account:
+                    $ref: '#/components/schemas/Account'
+                  intervals:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Interval'
+              example:
+                utility: "Pacific Gas and Electric"
+                account:
+                  id: "b5d64e61-4d05-4dde-ab85-cfd071024b81"
+                  account_number: "5777345636"
+                  address: "1 WARRIORS WAY SAN FRANCISCO CA 94158"
+                  usage_unit: "kwh"
+                  ghg_emissions_unit: "kg_co2e"
+                intervals: [
+                  {
+                      "start": 1646996400,
+                      "end": 1647000000,
+                      "usage": 0.7526,
+                      "consumption": null,
+                      "generation": null,
+                      "ghg_emissions": 0.2925
+                  },
+                  {
+                      "start": 1647000000,
+                      "end": 1647003600,
+                      "usage": 0.7536,
+                      "consumption": null,
+                      "generation": null,
+                      "ghg_emissions": 0.2325
+                  },
+                  {
+                      "start": 1647003600,
+                      "end": 1647007200,
+                      "usage": 0.7523,
+                      "consumption": null,
+                      "generation": null,
+                      "ghg_emissions": 0.2512
+                  },
+                  {
+                      "start": 1647007200,
+                      "end": 1647010800,
+                      "usage": 0.1812,
+                      "consumption": null,
+                      "generation": null,
+                      "ghg_emissions": 0.2612
+                  },
+                  {
+                      "start": 1647010800,
+                      "end": 1647014400,
+                      "usage": 0.1423,
+                      "consumption": null,
+                      "generation": null,
+                      "ghg_emissions": 0.2665
+                  }
+                ]
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '402':
+          description: Quota reached
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '403':
+          description: Permission denied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+
+  '/jobs/{job_id}/status':
+    get:
+      tags:
+        - Jobs
+      summary: Get job status
+      description: Check on the status of the asynchronous job used to initiate the start/stop/transfer of utility service
+      parameters:
+        - name: Pelm-Client-Id
+          in: header
+          description: Pelm-Client-Id from registration
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Secret
+          in: header
+          description: Pelm-Secret from registration
+          required: true
+          schema:
+            type: string
+        - name: job_id
+          in: path
+          description: job_id returned from successful service change request
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  error_code:
+                    type: string
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+
+  '/bills':
+    get:
+      tags:
+        - Bills
+      summary: Get bills
+      description: Get all bills for all Accounts for the given User, ordered by `statement_date` desc.
+
+        # Note that this endpoint was previously named '/users/{user_id}/bills', which is still live (user_id is the id you submitted for the user that you submitted when you initialized a Connect Token).
+
+      parameters:
+        - name: Authorization
+          in: header
+          description: access_token passed as "Bearer {access_token}"
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Client-Id
+          in: header
+          description: Pelm-Client-Id from registration
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Secret
+          in: header
+          description: Pelm-Secret from registration
+          required: true
+          schema:
+            type: string
+        - name: account_id
+          in: query
+          description: Optional field specifying account to query bills for. If omitted, bills for all accounts under this User will be returned. account_id's are returned in the [/accounts](https://pelm.readme.io/reference/get_accounts) response.
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: Successful operation
+          content:
+              application/json:
+                schema:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        account_id:
+                          type: string
+                          description: ID of account that bills belong to
+                        bills:
+                          type: array
+                          items:
+                            $ref: '#/components/schemas/Bill'
+                          description: Bills for account
+                example:
+                  - account_id: "b5d64e61-4d05-4dde-ab85-cfd071024b81"
+                    bills:
+                      - id: f582988c-053f-42f4-8c2c-faf2e75576da
+                        account_id: "b5d64e61-4d05-4dde-ab85-cfd071024b81"
+                        start_date: 1639555200
+                        end_date: 1642060800
+                        statement_date: 1644466400
+                        due_date: 1644566400
+                        payment_date: null
+                        total_amount_due: null
+                        total_charges: null
+                        charges:
+                          electric_charges: 200.08
+                          supplier_electric_charges: 150.98
+                          gas_charges: 40.00
+                          supplier_gas_charges: null
+                          other_charges: 0.00
+                        electric_usage_kwh: 163.54
+                        gas_usage_therm: 27.02
+                      - id: 36af3dad-bd54-48fb-9d6e-f9d599018cdf
+                        account_id: "b5d64e61-4d05-4dde-ab85-cfd071024b81"
+                        start_date: 1636963200
+                        end_date: 1639555200
+                        statement_date: 1641759200
+                        due_date: 1641859200
+                        payment_date: null
+                        total_amount_due: null
+                        total_charges: null
+                        charges:
+                          electric_charges: 100.04
+                          supplier_electric_charges: null
+                          gas_charges: 6.00
+                          supplier_gas_charges: null
+                          other_charges: 0.00
+                        electric_usage_kwh: 57.04
+                        gas_usage_therm: 12.01
+
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '402':
+          description: Quota reached
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '403':
+          description: Permission denied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+
+  # '/accounts/{account_id}/bills':
+  #   get:
+  #     tags:
+  #       - Bills
+  #     summary: Get bills
+  #     description: Get a list of Bill objects corresponding to a given energy account.
+  #     parameters:
+  #       - name: account_id
+  #         in: path
+  #         description: Energy account id
+  #         required: true
+  #         schema:
+  #           type: string
+  #       - name: Authorization
+  #         in: header
+  #         description: access_token passed as "Bearer {access_token}"
+  #         required: true
+  #         schema:
+  #           type: string
+  #       - name: Pelm-Client-Id
+  #         in: header
+  #         description: Pelm-Client-Id given to a developer when they register
+  #         required: true
+  #         schema:
+  #           type: string
+  #       - name: Pelm-Secret
+  #         in: header
+  #         description: Pelm-Secret given to a developer when they register
+  #         required: true
+  #         schema:
+  #           type: string
+  #     responses:
+  #       '200':
+  #         description: Successful operation
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: array
+  #               items:
+  #                 $ref: '#/components/schemas/Bill'
+  #             example:
+  #               - id: db660a8d-2940-4eba-b449-1861c16991e5
+  #                 bill_start_date: 1639555200
+  #                 bill_end_date: 1642060800
+  #                 total_amount_due: 240.08
+  #                 due_date: 1644566400
+  #               - id: db660a8d-2940-4eba-b449-1861c16991e5
+  #                 energy_account_id:
+  #                 bill_start_date: 1636963200
+  #                 bill_end_date: 1639555200
+  #                 total_amount_due: 106.04
+  #                 due_date: 1641859200
+
+  #       '400':
+  #         description: Client error
+  #         content:
+  #           application/json:
+  #             example:
+  #               error_code: parameter_invalid
+  #               message: Invalid bill_id.
+  #       '401':
+  #         description: Unauthorized
+  #         content:
+  #           application/json:
+  #             example:
+  #               error_code: token_invalid
+  #               message: Must provide access token.
+  #       '402':
+  #         description: Quota reached
+  #         content:
+  #           application/json:
+  #             example:
+  #               error_code: quota_reached
+  #               message: You have reached your plan's quota for this billing period. Please email info@pelm.com to upgrade your plan.
+  #       '403':
+  #         description: Permission denied
+  #         content:
+  #           application/json:
+  #             example:
+  #               error_code: permission_denied
+  #               message: Permission denied.
+  #       '500':
+  #         description: Server error
+  #         content:
+  #           application/json:
+  #             example:
+  #               error_code: internal_error
+  #               message: Something went wrong. Please try again.
+
+  '/bills/{bill_id}/pdf':
+    get:
+      tags:
+        - Bills
+      summary: Get bill pdf
+      description: Returns the pdf of a bill with specified bill_id as a file. Response will have 'Content-Type=application/pdf'. If a pdf is not available for the bill, returns a 500 error response.
+      parameters:
+        - name: bill_id
+          in: path
+          description: Bill id
+          required: true
+          schema:
+            type: string
+        - name: Authorization
+          in: header
+          description: access_token passed as "Bearer {access_token}"
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Client-Id
+          in: header
+          description: Pelm-Client-Id given to a developer when they register
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Secret
+          in: header
+          description: Pelm-Secret given to a developer when they register
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A PDF file
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '402':
+          description: Quota reached
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '403':
+          description: Permission denied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+
+  '/bills/{bill_id}/pay':
+    post:
+      tags:
+        - Bills
+      summary: Pay bill
+      description: Pay specified amount of bill with bill_id. The submitted credit card will be used to pay the bill. You'll receive an email once the payment has been processed by the utility.
+      parameters:
+        - name: bill_id
+          in: path
+          description: Bill id
+          required: true
+          schema:
+            type: string
+        - name: Authorization
+          in: header
+          description: access_token passed as "Bearer {access_token}"
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Client-Id
+          in: header
+          description: Pelm-Client-Id given to a developer when they register
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Secret
+          in: header
+          description: Pelm-Secret given to a developer when they register
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                payment_amount:
+                  type: number
+                  description: amount to pay in format that matches 12 or 23.03
+                card_number:
+                  type: string
+                  description: credit card number
+                card_exp_month:
+                  type: string
+                  description: credit card expiration month
+                card_exp_year:
+                  type: string
+                  description: credit card expiration year
+                card_cvc:
+                  type: string
+                  description: credit card cvc
+              required:
+                - user_id
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '402':
+          description: Quota reached
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '403':
+          description: Permission denied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+
+  '/payment-methods':
+    post:
+      tags:
+        - Payment Methods
+      summary: Add payment
+      description: Add credit card information to user's utility account.
+
+        Note that this endpoint was previously named '/users/{user_id}/payment-method/add', which is still live (user_id is the id you submitted for the user that you submitted when you initialized a Connect Token).
+      parameters:
+        - name: Authorization
+          in: header
+          description: access_token passed as "Bearer {access_token}"
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Client-Id
+          in: header
+          description: Pelm-Client-Id given to a developer when they register
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Secret
+          in: header
+          description: Pelm-Secret given to a developer when they register
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                utility_id:
+                  type: number
+                  description: utility id
+                name:
+                  type: string
+                  description: name of card holder
+                card_number:
+                  type: integer
+                  description: credit card number
+                expiration_month:
+                  type: integer
+                  description: credit card expiration month
+                expiration_year:
+                  type: integer
+                  description: credit card expiration year
+                security_code:
+                  type: integer
+                  description: credit card security code
+                zip_code:
+                  type: integer
+                  description: credit card zip code
+                nickname:
+                  type: string
+                  description: preferred name of card in utility account
+              required:
+                - utility_id
+                - name
+                - card_number
+                - expiration_month
+                - expiration_year
+                - security_code
+                - zip_code
+                - nickname
+      responses:
+        '200':
+          description: Successful operation
+          content:
+              application/json:
+                schema:
+                  type: object
+
+  '/emission-rates':
+    get:
+      tags:
+        - Emission Rates
+      summary: Get emission rates
+      description:
+        "Get emission rate intervals for a given utility. Currently only supported for PG&E (id=1), SCE (id=2), SDG&E (id=57), LADWP (id=50). View list of supported utilities and their utility_id's [here](https://docs.pelm.com/reference/utilities)."
+      parameters:
+        - name: Pelm-Client-Id
+          in: header
+          description: Pelm-Client-Id from registration
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Secret
+          in: header
+          description: Pelm-Secret from registration
+          required: true
+          schema:
+            type: string
+        - name: utility_id
+          in: query
+          description: id corresponding to the utility you want to fetch rates for. List of all utility_id's can be found at https://pelm.readme.io/reference/supported-utilities.
+          required: true
+          schema:
+            type: integer
+        - name: start_time
+          in: query
+          description: Start time of desired intervals in UNIX time. Defaults to one month before end_time.
+          schema:
+            type: integer
+            format: int64
+        - name: end_time
+          in: query
+          description: End time of desired intervals in UNIX time. Defaults to current time.
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+
+                properties:
+                  utility_id:
+                    type: integer
+                    description: Id of utility
+                  ghg_emission_rate_unit:
+                    type: string
+                    description: Unit for greenhouse gas emission rate (e.g. kg_co2e_per_kwh, which corresponds to kg of CO2 equivalent emitted per kWh of electricity consumed).
+                  intervals:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        start:
+                          type: integer
+                          format: int64
+                          description: The start time of interval in UNIX time
+                        end:
+                          type: integer
+                          format: int64
+                          description: The end time of interval in UNIX time
+                        ghg_emission_rate:
+                          type: number
+                          description: The rate of greenhouse gas emissions for this utility at a particular point of time. Calculated using historical demand and emissions data.
+              example:
+                utility_id: 1
+                ghg_emission_rate_unit: "kg_co2e_per_kwh"
+                intervals: [
+                  {
+                      "start": 1646975400,
+                      "end": 1646975700,
+                      "ghg_emission_rate": 0.0697
+                  },
+                  {
+                      "start": 1646975700,
+                      "end": 1646976000,
+                      "ghg_emission_rate": 0.0726
+                  },
+                  {
+                      "start": 1646976000,
+                      "end": 1646976300,
+                      "ghg_emission_rate": 0.0707
+                  },
+                  {
+                      "start": 1646976300,
+                      "end": 1646976600,
+                      "ghg_emission_rate": 0.0659
+                  },
+                  {
+                      "start": 1646976600,
+                      "end": 1646976900,
+                      "ghg_emission_rate": 0.0629
+                  }
+                ]
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '402':
+          description: Quota reached
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '403':
+          description: Permission denied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+
+  '/auth/token':
+    post:
+      tags:
+        - Auth
+      summary: Create access_token
+      description: Exchange an `authorization_code` for an `access-token`. The `authorization_code` is returned in the Connect `onSuccess` callback after the user successfully submits their utility credentials.
+
+
+        The `access_token` will not expire. Make sure you securely store it in your database so you can make future requests for the given user.
+
+
+        The fields `access_token_expires_in`, `refresh_token`, and `refresh_token_expires_in` can be ignored. These are included for applications using our legacy authorization framework.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  description: authorization code from Connect.
+              required:
+                - code
+      parameters:
+        - name: Pelm-Client-Id
+          in: header
+          description: Your Pelm-Client-Id recieved on registration
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Secret
+          in: header
+          description: Your Pelm-Secret recieved on registration
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              # schema:
+              #   $ref: '#/components/schemas/Tokens'
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                  access_token_expires_in:
+                    type: string
+                    description: number of seconds until access_token expires (1 hour)
+                  refresh_token:
+                    type: string
+                  refresh_token_expires_in:
+                    type: string
+                    description: number of seconds until refresh_token expires (1 year)
+              example:
+                access_token: ACCESS_TOKEN
+                access_token_expires_in: 3600
+                refresh_token: REFRESH_TOKEN
+                refresh_token_expires_in: 31536000
+
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '403':
+          description: Permission denied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+
+  '/auth/connect-token':
+    post:
+      tags:
+        - Auth
+      summary: Create a Connect token
+      description: Create a Connect token using client credentials in order to initiate the Connect flow.
+      parameters:
+        - name: Pelm-Client-Id
+          in: header
+          description: Your Pelm-Client-Id recieved on registration
+          required: true
+          schema:
+            type: string
+        - name: Pelm-Secret
+          in: header
+          description: Your Pelm-Secret recieved on registration
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: string
+                  description: ID specified by you to identify the user. This allows you to refer to the User using an ID you already have, precluding the need to save a new user_id generated by Pelm.
+
+
+                    Typically, clients will set their own db user_id as this value.
+                utility_id:
+                  type: string
+                  description: Include this optional parameter if you already know which Utility your User uses. If included, the User will skip the Utility Selection Screen. If omitted, the User will need to select their Utility.
+
+
+                    You can find a list of `utility_id`s [here](https://docs.pelm.com/reference/utilities).
+              required:
+                - user_id
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  connect_token:
+                    type: string
+                  expires_in:
+                    type: string
+                    description: number of seconds until connect_token expires (30 min)
+              example:
+                connect_token: CONNECT_TOKEN
+                expires_in: 1800
+
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '403':
+          description: Permission denied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+
+  '/connect':
+    post:
+      tags:
+        - Connect
+      summary: Create or update a User.
+      description: This endpoint replaces having your user go through the [Connect flow](https://docs.pelm.com/reference/overview). If you want to use this endpoint to skip the Connect flow, you must link to [Pelm's Terms of Service](https://www.pelm.com/terms-of-service) in your website or onboarding flow.
+      parameters:
+        - name: Authorization
+          in: header
+          description: connect_token passed as "Bearer {connect_token}". More information on connect_tokens can be found [here](https://docs.pelm.com/reference/post_auth-connect-token).
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                utility_id:
+                  type: string
+                  description: ID specifying which utility this user has an account with. You can find a list of `utility_id`s [here](https://docs.pelm.com/reference/utilities).
+                username:
+                  type: string
+                  description: User's utility username.
+                password:
+                  type: string
+                  description: User's utility password.
+              required:
+                - utility_id
+                - username
+                - password
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  authorization_code:
+                    type: string
+                    description: code that is exchanged for an access_token
+              example:
+                authorization_code: AUTHORIZATION_CODE
+
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+              example:
+                error_code: credentials_invalid
+
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  message:
+                    type: string
+
+components:
+  schemas:
+    Utility:
+      type: object
+      properties:
+        id:
+          type: number
+        full_name:
+          type: string
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: This is the id specified by you when you initially created the Connect Token to connect this user's utility account.
+        utility:
+          $ref: '#/components/schemas/Utility'
+        utility_username:
+          type: string
+        credentials_valid:
+          type: boolean
+          description: Boolean field indicating whether the credentials we have for this User are valid. A common scenario that would cause this field to become false is the User changing their password.
+
+
+            If this field is false, then we're unable to pull the latest data for this User, and your User needs to go through the Connect flow again.
+
+    Account:
+      type: object
+      properties:
+        id:
+          type: string
+        account_number:
+          type: string
+        address:
+          type: string
+        available_meter_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/MeterType'
+          description: The types of meters available for this account. This defines what kind of intervals you can query for this account via `/intervals`.
+        usage_unit:
+          type: string
+          description: Unit for electricity usage. https://pelm.readme.io/reference/unit-codes
+        gas_usage_unit:
+          type: string
+          description: Unit for gas usage. Omitted if account does not have a gas meter. https://pelm.readme.io/reference/unit-codes
+        ghg_emissions_unit:
+          type: string
+          description: Unit for greenhouse gas emissions. https://pelm.readme.io/reference/unit-codes
+    Bill:
+      type: object
+      properties:
+        id:
+          type: string
+        account_id:
+          type: string
+        start_date:
+          type: string
+        end_date:
+          type: string
+        statement_date:
+          type: string
+        due_date:
+          type: string
+        payment_date:
+          type: string
+          description: Date the bill is set to be paid if auto-pay is enabled.
+        total_amount_due:
+          type: number
+          description: Total amount due for this bill, which is equivalent to any existing balance plus total charges from this billing period. e.g. if you have an unpaid balance of $50 from last billing period and your total charges for this billing period is $100, then total_amount_due = 150.
+        total_charges:
+          type: number
+          description: Total charges for energy usage during this billing period.
+        charges:
+          type: object
+          properties:
+            electric_charges:
+              type: number
+              description: Total electric charges from Utility. Equal to delivery + generation charges if the Utility is responsible for generating electricity for this Account. Equal to just delivery charges if a separate company handles electricity generation.
+            supplier_electric_charges:
+              type: number
+              description: Electricity generation charges from supplier. Null if Utility is supplier.
+            gas_charges:
+              type: number
+            other_charges:
+              type: number
+        electric_usage_kwh:
+          type: number
+        gas_usage_therm:
+          type: number
+    Interval:
+      type: object
+      properties:
+        start:
+          type: integer
+          format: int64
+          description: The start time of interval in UNIX time
+        end:
+          type: integer
+          format: int64
+          description: The end time of interval in UNIX time
+        usage:
+          type: number
+          description: The net electricity or gas usage during this time period. The unit is kWh for electricity usage and therms for gas usage.
+        consumption:
+          type: number
+          description: The amount of electricity consumed in kWh during this time period. Always null for gas intervals. Availability varies by Utility and Account.
+        generation:
+          type: number
+          description: The amount of electricity generated in kWh during this time period. Always null for gas intervals. Availability varies by Utility and Account.
+        ghg_emissions:
+          type: number
+          description: The green house gases emitted by this user in kgCO2e (kg of carbon dioxide equivalent). This data is currently only available for PG&E users. Emissions are calculated by taking CAISO data of emission rate at the given time multiplied by the electricity usage.
+    MeterType:
+      type: string
+      enum: ['ELECTRIC', 'GAS']
+
