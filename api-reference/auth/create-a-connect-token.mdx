@@ -17,20 +17,20 @@ Typically, clients will set their own db user_id as this value.
 
 <ParamField body="utility_id" type="string" required>
 
-Include this optional parameter if you already know which Utility your User uses. If included, the User will skip the Utility Selection Screen. If omitted, the User will need to select their Utility.
+Include this optional parameter if you already know which utility your user uses. If included, the user will skip the Utility Selection Screen. If omitted, the user will need to select their utility.
 
-You can find a list of utility_ids here.
+You can find a list of `utility_id`s [here](https://pelm.com/docs/reference/utilities).
 
 </ParamField>
 
 ### Headers
 
 <ParamField header="Pelm-Client-Id" type="string" required>
-  Pelm-Client-Id given to a developer when they register
+  `Pelm-Client-Id` given on registration
 </ParamField>
 
 <ParamField header="Pelm-Secret" type="string" required>
-  Pelm-Secret given to a developer when they register
+  `Pelm-Secret` given on registration
 </ParamField>
 
 <RequestExample>
@@ -49,7 +49,7 @@ curl --request POST \
 <ResponseField name="connect_token" type="string"></ResponseField>
 
 <ResponseField name="expires_in" type="string">
-  number of seconds until connect_token expires (30 min)
+  Number of seconds until the `connect_token` expires (30 min)
 </ResponseField>
 
 <ResponseExample>

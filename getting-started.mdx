@@ -15,11 +15,7 @@ The first step to accessing the Pelm API is obtaining your client credentials. R
 ## Make your first request
 // TODO: make this work
 
-Let's do a quick sanity check to make sure your credentials are working properly.
-
-Fill in your credentials in the Header inputs below and then click "Send Request".
-
-Quick sanity check.
+Let's do a quick sanity check to make sure your credentials are working properly. Fill in your credentials in the Header inputs below and then click "Send Request".
 
 <Api api="POST https://api.pelm.com/auth/connect-token" apiComponents={
   [
@@ -86,14 +82,14 @@ Quick sanity check.
 If you get a response that looks similar to this, then you're good to go.
 ```json Response
 {
-  "connect_token": "CONNECT_TOKEN",
+  "connect_token": "{CONNECT_TOKEN}",
   "expires_in": 1800
 }
 ```
 
 ## Utility Credentials
 
-In order to test our API, you'll need access to a set of valid credentials for one of our [supported utilities](/reference/utilities). Alternatively, you can use our [Sandbox User](/reference/sandbox-user).
+In order to test the API, you'll need access to a set of valid credentials for one of our [supported utilities](/reference/utilities). Alternatively, you can use the [Sandbox User](/reference/sandbox-user).
 
 
 ## Core Concepts

@@ -1,6 +1,6 @@
 ---
 title: "Get Bill PDF"
-description: "Returns the pdf of a bill with specified bill_id as a file."
+description: "Returns the pdf of a bill with specified `bill_id` as a file."
 api: "GET /bills/{bill_id}/pdf"
 ---
 
@@ -12,21 +12,21 @@ api: "GET /bills/{bill_id}/pdf"
 ### Path Params
 
 <ParamField path="bill_id" type="string" required>
-  Bill id
+  The id for the `Bill`
 </ParamField>
 
 ### Headers
 
 <ParamField header="Authorization" type="string" required>
-  access_token passed as "Bearer \{access_token}"
+  `access_token` passed as "Bearer \{access_token}"
 </ParamField>
 
 <ParamField header="Pelm-Client-Id" type="string" required>
-  Pelm-Client-Id given to a developer when they register
+  `Pelm-Client-Id` given on registration
 </ParamField>
 
 <ParamField header="Pelm-Secret" type="string" required>
-  Pelm-Secret given to a developer when they register
+  `Pelm-Secret` given on registration
 </ParamField>
 
 ### Response

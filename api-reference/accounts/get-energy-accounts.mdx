@@ -1,6 +1,6 @@
 ---
 title: "Get Energy Accounts"
-description: "Get a list of energy account ids that are tied to a given user."
+description: "Get a list of `Account` ids that are tied to a given `User`."
 api: "GET /accounts"
 ---
 
@@ -13,15 +13,15 @@ api: "GET /accounts"
 ### Headers
 
 <ParamField header="Authorization" type="string" required>
-  access_token passed as "Bearer \{access_token}"
+  `access_token` passed as "Bearer \{access_token}"
 </ParamField>
 
 <ParamField header="Pelm-Client-Id" type="string" required>
-  Pelm-Client-Id given to a developer when they register
+  `Pelm-Client-Id` given on registration
 </ParamField>
 
 <ParamField header="Pelm-Secret" type="string" required>
-  Pelm-Secret given to a developer when they register
+  `Pelm-Secret` given on registration
 </ParamField>
 
 <RequestExample>

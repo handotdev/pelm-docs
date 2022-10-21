@@ -5,17 +5,17 @@ title: "Core Concepts"
 ## Core Objects
 #### User
 
-The `User` model corresponds to a utility login. If your user has multiple utility logins, such as a SCE login and SoCalGas login, they must go through the [Connect](https://pelm.readme.io/reference/overview) flow multiple times. Each of these utility logins will be associated with a Pelm `User`, i.e. your user might have multiple different Pelm `User`s.
+The `User` model corresponds to a utility login. If your user has multiple utility logins, such as an SCE login and a SoCalGas login, they must go through the [Connect](https://pelm.readme.io/reference/overview) flow multiple times. Each of these utility logins will be associated with a Pelm `User`, i.e. your user might be associated with multiple different Pelm `User`s.
 
 #### Account
 
-The `Account` model corresponds to an account under a utility login. There is typically a one-to-one mapping of `Account` to property. If a user has a residential home and a vacation home, these would correspond to two different `Account` objects.
+The `Account` model corresponds to an account under a utility login. There is typically a one-to-one mapping of `Account` to property. If a user has a residential home and a vacation home, these would correspond to two different `Account` objects. An `Account`object is always tied to a singular `User` object.
 
 Usage intervals and bills are queried per `Account`.
 
 #### Common scenarios
 
-Bob owns three houses in the Bay Area. PG&E serves gas and electricity for each of his houses. Bob would need to go through the Connect flow once. Bob is associated with one `User` with three different `Account`s.
+Bob owns three houses in the Bay Area. PG&E serves gas and electricity for each of his houses. Bob would need to go through the Connect flow once. Bob is associated with one `User` that has three different `Account`s.
 
 Alice rents an apartment in Southern California. SCE provides her electricity and SoCalGas provides her gas. Alice would need to go through the Connect flow twice. Alice is associated with two `User`s, each with one `Account`.
 
@@ -48,7 +48,7 @@ During that period, our endpoints may return the following `500` response:
 }
 ```
 
-We recommend polling our endpoints.
+We recommend polling our endpoints to know when data becomes available.
 
 Coming soon: webhooks.
 

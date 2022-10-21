@@ -14,12 +14,12 @@ api: "GET /emission-rates"
 <ParamField query="utility_id" type="integer" required>
   id corresponding to the utility you want to fetch rates for. Learn more at the
   [list of all
-  utility_id's](https://pelm.readme.io/reference/supported-utilities).
+  supported utilities](https://pelm.com/docs/reference/utilities).
 </ParamField>
 
 <ParamField query="start_time" type="integer">
   Start time of desired intervals in UNIX time. Defaults to one month before
-  end_time.
+  `end_time`.
 </ParamField>
 
 <ParamField query="end_time" type="integer">
@@ -29,17 +29,17 @@ api: "GET /emission-rates"
 ### Headers
 
 <ParamField header="Pelm-Client-Id" type="string" required>
-  Pelm-Client-Id given to a developer when they register
+  `Pelm-Client-Id` given on registration
 </ParamField>
 
 <ParamField header="Pelm-Secret" type="string" required>
-  Pelm-Secret given to a developer when they register
+  `Pelm-Secret` given on registration
 </ParamField>
 
 ### Response
 
 <ResponseField name="utility_id" type="integer">
-  Id of utility
+  Id of the utility
 </ResponseField>
 
 <ResponseField name="ghg_emission_rate_unit" type="string">

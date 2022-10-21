@@ -1,29 +1,29 @@
 ---
 title: "Get Bills"
 api: "GET /bills"
-description: "Get all bills for all Accounts for the given User, ordered by statement_date desc."
+description: "Get all `Bill`s for all `Account`s for the given `User`, ordered by `statement_date` descending."
 ---
 
 ### Query Params
 
 <ParamField query="account_id" type="string">
-  Optional field specifying account to query bills for. If omitted, bills for
-  all accounts under this User will be returned. account_id's are returned in
-  the /accounts response.
+  Optional field specifying the `Account` to query `Bill`s for. If omitted, `Bill`s for
+  all accounts under this `User` will be returned. `account_id`'s are returned in
+  the `/accounts` response.
 </ParamField>
 
 ### Headers
 
 <ParamField header="Authorization" type="string" required>
-  access_token passed as "Bearer \{access_token}"
+  `access_token` passed as "Bearer \{access_token}"
 </ParamField>
 
 <ParamField header="Pelm-Client-Id" type="string" required>
-  Pelm-Client-Id given to a developer when they register
+  `Pelm-Client-Id` given on registration
 </ParamField>
 
 <ParamField header="Pelm-Secret" type="string" required>
-  Pelm-Secret given to a developer when they register
+  `Pelm-Secret` given on registration
 </ParamField>
 
 <RequestExample>
@@ -39,11 +39,11 @@ curl --request GET \
 ### Response
 
 <ResponseField name="account_id" type="string">
-  ID of account that bills belong to
+  ID of the `Account` that the `Bill`s belong to
 </ResponseField>
 
 <ResponseField name="bills" type="array of objects">
-  Bills for account
+  `Bill` objects for the `Account`
   <Expandable>
     <ResponseField name="id" type="string" />
     <ResponseField name="account_id" type="string" />

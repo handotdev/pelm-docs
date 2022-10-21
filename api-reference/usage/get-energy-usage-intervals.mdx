@@ -1,26 +1,26 @@
 ---
 title: "Get Energy Usage Intervals"
-description: "Get a list of interval objects corresponding to energy usage and green house gas emissions for a given energy account in a specific time range. Emissions data is currently only available for PG&E and SCE."
+description: "Get a list of interval objects corresponding to energy usage and greenhouse gas emissions for a given `Account` in a specific time range. Emissions data is currently only available for PG&E and SCE."
 api: "GET /intervals"
 ---
 
-The type of energy intervals (gas vs. electric) is specified in the `type` query param. Information on whether this account has electricity and/or gas data is found in the `available_meter_type` field of the `Account` object, which can be queried via `/accounts`. Gas data is currently only available for PG&E.
+The type of energy (gas vs. electric) is specified in the `type` query param. Information on whether this account has electricity and/or gas data is found in the `available_meter_type` field of the `Account` object, which can be queried via `/accounts`.
 
-Timestamp is in epoch time, usage is in units specified by the unit for that account (otherwise kWh or therms if no unit is specified), and emissions is in kgCO2e (kg of carbon dioxide equivalent).
+Timestamps are in UNIX time, usage is in the unit specified by the `usage_unit` for that `Account` (otherwise kWh/therms if no unit is specified), and emissions is in kgCO2e (kg of carbon dioxide equivalent).
 
-If neither start_date nor end_date are provided, response will include usage data for the last two months.
+If neither `start_date` nor `end_date` are provided, the response will include usage data for the last two months.
 
-If start_date is included but end_date is not, response will include usage data for two months starting at start_date.
+If `start_date` is included but `end_date` is not, the response will include usage data for two months starting at `start_date`.
 
-If end_date is included but start_date is not, response will include usage data for two months ending at end_date.
+If `end_date` is included but `start_date` is not, the response will include usage data for two months ending at `end_date`.
 
 Note that this endpoint was previously named `/accounts/{account_id}/intervals`, which is still live.
 
 ### Query Params
 
 <ParamField query="account_id" type="string" required>
-  Energy account id to query usage intervals for. account_id's are returned in
-  the /accounts response.
+  Energy account id to query usage intervals for. `account_id`'s are returned in
+  the `/accounts` response.
 </ParamField>
 
 <ParamField query="type" type="string">
@@ -38,15 +38,15 @@ Note that this endpoint was previously named `/accounts/{account_id}/intervals`,
 ### Headers
 
 <ParamField header="Authorization" type="string" required>
-  access_token passed as "Bearer \{access_token}"
+  `access_token` passed as "Bearer \{access_token}"
 </ParamField>
 
 <ParamField header="Pelm-Client-Id" type="string" required>
-  Pelm-Client-Id given to a developer when they register
+  `Pelm-Client-Id` given on registration
 </ParamField>
 
 <ParamField header="Pelm-Secret" type="string" required>
-  Pelm-Secret given to a developer when they register
+  `Pelm-Secret` given on registration
 </ParamField>
 
 <RequestExample>
@@ -72,7 +72,7 @@ curl --request GET \
     <ResponseField name="address" type="string"></ResponseField>
     <ResponseField name="available_meter_types" type="array of strings">
       The types of meters available for this account. This defines what kind of
-      intervals you can query for this account via /intervals.
+      intervals you can query for this account via `/intervals`.
     </ResponseField>
     <ResponseField name="usage_unit" type="string">
       Unit for electricity usage. [Learn
