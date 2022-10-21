@@ -1,12 +1,8 @@
 ---
-title: "Basic Concepts"
+title: "Core Concepts"
 ---
 
-// TODO: make sure links are good.
-
 ## Core Objects
-The bread and butter of our API.
-
 #### User
 
 The `User` model corresponds to a utility login. If your user has multiple utility logins, such as a SCE login and SoCalGas login, they must go through the [Connect](https://pelm.readme.io/reference/overview) flow multiple times. Each of these utility logins will be associated with a Pelm `User`, i.e. your user might have multiple different Pelm `User`s.
@@ -43,7 +39,16 @@ Connect is a UI component provded by Pelm that allows your users to seamlessly a
 
 We require a few minutes to sync a User's data after they go through Connect for the first time.
 
-During that period, our endpoints may return a `500` error response with error_code `data_unavailable`. Therefore, we recommend that you poll our endpoints.
+During that period, our endpoints may return the following `500` response:
+
+```json
+{
+  "error_code": "data_unavailable",
+  "message": "We're currently loading data for this account, please try again in 5 minutes."
+}
+```
+
+We recommend polling our endpoints.
 
 Coming soon: webhooks.
 

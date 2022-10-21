@@ -49,8 +49,8 @@
     {
       "group": "Guides",
       "pages": [
-        "getting-started-2",
-        "basic-concepts-2",
+        "getting-started",
+        "core-concepts",
         "connect-guide"
       ]
     },

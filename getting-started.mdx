@@ -2,316 +2,118 @@
 title: "Getting Started"
 ---
 
-## Registering for Pelm
+import { Api } from "@/ui/Api";
 
-To start using Pelm, first register at [pelm.com/register](https://www.pelm.com/register). Your **Company** will be displayed to users in Connect (more details below). Upon successful account creation, you'll receive an email with your `Pelm-Client-Id` and `Pelm-Secret`. These will be essential for making requests to Pelm. Please keep these secret and in a safe place.
 
-If you need to update any of these fields or need help with anything else, email us at [info@pelm.com](mailto:info@pelm.com).
 
-The next few sections walk you through connecting with a user's utility account and querying their data. If you'd like to view example code, check out the [Quickstart App](/reference/quickstart-app).
+## Client credentials
 
-## Sandbox mode
+The first step to accessing the Pelm API is obtaining your client credentials. Request credentials by visiting [pelm.com/schedule](https://www.pelm.com/schedule) or emailing [info@pelm.com](mailto:info@pelm.com).
 
-If you aren't ready to use real data yet or don't have access to a utility account, you can test Pelm with a Sandbox User. More details can be found [here](/reference/sandbox-mode).
+<Info>Your `Pelm-Client-Id` and `Pelm-Secret` will be essential for making requests to Pelm. Please keep these secret and in a safe place.</Info>
 
-## Getting Authorization for User Data through Connect
+## Make your first request
+// TODO: make this work
 
-Connect is a JavaScript plugin that allows your users to securely and seamlessly connect their utility accounts to Pelm. It creates an `access_token` associated with your user that you'll use to access their data.
+Let's do a quick sanity check to make sure your credentials are working properly.
 
-You can view the repo for our convenient React wrapper [here](https://github.com/Pelm-Technologies/react-pelm-connect).
+Fill in your credentials in the Header inputs below and then click "Send Request".
 
-![Screenshot](/docs/images/reference/screenshot.png)
+Quick sanity check.
 
-### Install
-
-```bash Terminal
-npm install --save react-pelm-connect
-```
-
-### Via Script
-
-```html HTML
-<script src="https://api.pelm.com/connect/pelm-connect.js"></script>
-```
-
-### Connect Token
-
-The first step is creating a Connect Token. This is an extra security measure that abstracts away information like your `Pelm-Client-Id` and `user_id` from the web client.
-
-To retrieve a Connect Token, make a POST to the `/auth/connect_token` endpoint:
-
-```bash cURL
-curl -X POST https://api.pelm.com/auth/connect-token -H "Pelm-Client-Id: {CLIENT_ID}" -H "Pelm-Secret: {CLIENT_SECRET}" -F "user_id={YOUR_USER_ID}" -F "utility_id={UTILITY_ID}"
-```
-
-Included in the form parameters must be your own unique identifier for the user. This identifier will be how you can associate responses from API endpoints with a particular user record stored in your backend.
-
-Pelm will infer which flow (either **update** or **create**) the `User` will see based on the `user_id` you pass. In **create** mode, the user will see the following screens:
-
-- Terms of Service Screen (accepting terms of service)
-- Utility Selection Screen (selecting a utility)
-- Credentials Screen (entering utility credentials)
-
-In **update** mode, the user will start directly at the Utility Selection Screen.
-
-If you submit a new `user_id` for a user that has already connected their account with you, your previously submitted `user_id` will be overwritten by the new value. Make sure you change this appropriately in your backend.
-
-Include the optional `utility_id` parameter if you want your User to skip the Utility Selection Screen. You can find a list of `utility_id`s [here](/reference/utilities).
-
-Connect Tokens expire after 30 minutes.
-
-More information on the Connect Token can be found in the docs [here](/api-reference/auth-connect-token).
-
-### Config
-
-The next step is creating a Config object to initialize Connect. The config is used to specify your Connect Token and callbacks for the success and exit cases. You can find a full Connect API reference [here](https://github.com/Pelm-Technologies/react-pelm-connect#api-reference).
-
-Once the `User` completes this flow, your `onSuccess` callback will be called with an authorization `code`. You will need to exchange this `code` for an `access_token` in order to access API resources. The `code` is only valid for 10 minutes after it is generated, so you must exchange it for an `access_token` during this time or go through the Connect flow again.
-
-The Config option takes in the following parameters.
-
-- `connectToken`: the Connect Token created in the previous step
-- `onSuccess`: this is the callback that is called when your User successfully connects their utility account. This callback should take an `authorizationCode: string` parameter, which you'll use to get an [access_token](https://pelm.readme.io/reference/post%5Fauth-token-1).
-- `onExit`: this is the callback that is called when Connect is exited but the user has not successfully connected their utility account. The callback will be called if the user manually exits Connect or if an error occurs causing Connect to close.
-
-Example Config object:
-
-```js
-config: Config = { connectToken: 'CONNECT_TOKEN', onSuccess: (authorizationCode: string) => {...}, onExit: () => {} }
-```
-
-### Using Connect
-
-#### Hook Implementation
-
-Implementation using [React Hooks](https://reactjs.org/docs/hooks-intro.html).
-
-```js JavaScript
-import { useConnect, Config } from "pelm-connect";
-
-const Connect = (props: Props) => {
-const config: Config = {
-connectToken: 'YOUR_CONNECT_TOKEN',
-onSuccess: (authorizationCode: string) => {...},
-onExit: () => {...}
-}
-
-    const { open, ready, error } = useConnect(config);
-
-    return <button
-        type="button"
-        className="button"
-        onClick={() => open()}
-        disabled={!ready}
-    >
-        Connect your utility
-    </button>
-
-}
-
-export default Connect
-```
-
-#### Styled Button
-
-We also provide a styled button you can use.
-
-```js JavaScript
-import { ConnectButton, Config } from 'pelm-connect';
-
-const Connect = (props: Props) => {
-const config: Config = {
-connectToken: 'YOUR_CONNECT_TOKEN',
-onSuccess: (authorizationCode: string) => {...},
-onExit: () => {...}
-}
-
-    return <ConnectButton config={config} />
-
-}
-
-export default Connect
-```
-
-#### Via script
-
-If you want to implement Connect into a non-React web application, follow this implementation.
-
-```html HTML
-<!DOCTYPE html>
-
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>My test page</title>
-  </head>
-  <body>
-    <h1>Pelm Connect javascript example</h1>
-    <button onClick="launchPelm()">Connect utility</button>
-    <script src="http://api.pelm.com/connect/pelm-connect.js"></script>
-    <script>
-      const launchPelm = async function () {
-        const connectToken = "YOUR_CONNECT_TOKEN";
-        const onSuccess = (authorizationCode) => {
-          // exchange authorization code for access_token
-        };
-        const onExit = () => {};
-
-        const config = {
-          connectToken,
-          onSuccess,
-          onExit,
-        };
-
-        const pelm = await window.PelmConnect.create(config);
-        pelm.open();
-      };
-    </script>
-  </body>
-</html>
-```
-
-## Getting an Access Token
-
-An `access_token` gives you access to a given user's data.
-
-To exchange an authorization `code` for an `access_token`, make a POST request to `https://api.pelm.com/auth/token` [(API reference)](https://pelm.readme.io/reference/post%5Fauth-token-1). In the request body, include the `code`. You also need to include a `grant_type` parameter set to "code".
-
-The `code` is the string argument that is passed to the `onSuccess` callback after a user successfully completes the Connect flow.
-
-Add your `Pelm-Client-Id` and `Pelm-Secret` in the header. For example:
-
-```bash cURL
-curl --data "code={AUTHORIZATION_CODE}&grant_type=code" https://api.pelm.com/auth/token -H "Pelm-Client-Id: YOUR_CLIENT_ID" -H "Pelm-Secret: YOUR_CLIENT_SECRET"
-```
-
-If you've done this correctly, you'll receive the `access_token` and `refresh_token` in the JSON response:
-
-```json JSON
-{
-  "access_token": "57f20230-4ee7-11ec-9b0c-acde48001122",
-  "access_token_expires_in": 3600,
-  "refresh_token": "aea9b417e72b3978c5bfcd0782c3a486ec63abf5e85ce9a62ba36d1b18b12488",
-  "refresh_token_expires_in": 1314000
-}
-```
-
-The `access_token` lasts for one day. After it expires, to get a new one you'll have to make a POST request to `https://api.pelm.com/auth/token` with `refresh_token` as the Basic token in the Authorization header and `grant_type` set to "refresh_token". The `refresh_token` lasts for one year. After it expires, the `User` will need to reauthorize you to access their utility data using Connect.
-
-## Requesting Accounts
-
-A given `User` can have multiple accounts corresponding to different meters. For example, they can have a primary home, a vacation home, and a rental property all under the same utility login, each with its own set of interval data. Thus, energy interval data is tied to an `Account`; a given `User` can have multiple `Accounts`, but a given `Account` can only be linked to one `User`.
-
-To get all the accounts for a given `User`, make a request to `https://api.pelm.com/accounts` [(API reference)](https://pelm.readme.io/reference/get%5Faccounts).
-
-You'll need to include the following headers:
-
-- `Authorization` \= `Bearer {ACCESS_TOKEN}`
-- `Pelm-Client-Id` \= `{CLIENT_ID}`
-- `Pelm-Secret` \= `{CLIENT_SECRET}`
-
-For example:
-
-```bash cURL
-curl https://api.pelm.com/accounts -H "Authorization: Bearer {ACCESS_TOKEN}" -H "Pelm-Client-Id: {CLIENT_ID}" -H "Pelm-Secret: {CLIENT_SECRET}"
-```
-
-You'll get a list of `Account` objects in the response:
-
-```json JSON
-[
-  {
-    "id": "b5d64e61-4d05-4dde-ab85-cfd071024b81",
-    "account_number": "5777345636",
-    "address": "1 WARRIORS WAY SAN FRANCISCO CA 94158",
-    "usage_unit": "kwh",
-    "emissions_unit": "kg_co2e_per_kwh"
-  },
-  {
-    "id": "d9a14c1c-746b-43fc-83f2-e93b6f94f05d",
-    "account_number": "8011757182",
-    "address": "1 FERRY BUILDING SAN FRANCISCO CA 94105",
-    "usage_unit": "kwh",
-    "emissions_unit": "kg_co2e_per_kwh"
-  }
-]
-```
-
-Note the `id` here. This `id` is a required parameter for making requests for an `Account`'s interval data, bills, and more.
-
-## Requesting Interval Data
-
-Now you can request interval data for a given `Account`. Make a GET request to `https://api.pelm.com/intervals` with the desired `account_id`, `start_date`, and `end_date`. Similar to the previous request, you need to pass your `access_token`, `Pelm-Client-Id`, and `Pelm-Secret` as headers.
-
-For example:
-
-```bash
-cURL https://api.pelm.com/intervals?account_id={ACCOUNT_ID}&start_date={START_DATE}&end_date={END_DATE} -H "Authorization: Bearer {ACCESS_TOKEN}" -H "Pelm-Client-Id: {CLIENT_ID}" -H "Pelm-Secret: {CLIENT_SECRET}"
-```
-
-The `start_date` and `end_date` should be in UNIX time and refer to the bounds of the interval data that you want. The `account_id` was retrieved in the previous step.
-
-If you don't enter a `start_date` and `end_date`, the default response will include the past two months of historical interval data.
-
-If all has gone correctly, you should receive a JSON response with the `Utility` name, the `Account` object, and a list of `Interval` objects. Each `Interval` object has the following fields:
-
-- `start`: the start time of the interval in UNIX time
-- `end`: the end time of the interval in UNIX time
-- `usage`: the electricity used between `start` and `end` times
-- `ghg_emission`: the amount of greenhouse gases emissions caused by the electricity usage in this time interval. This is currently only available for PG&E and SCE users.
-
-The `Account` object will contain the units used in the `Interval`s.
-
-```json JSON
-{
-  "utility": "Pacific Gas and Electric",
-  "account": {
-    "id": "b5d64e61-4d05-4dde-ab85-cfd071024b81",
-    "account_number": "5777345636",
-    "address": "1 WARRIORS WAY SAN FRANCISCO CA 94158",
-    "usage_unit": "kwh",
-    "ghg_emissions_unit": "kg_co2e"
-  },
-  "intervals": [
+<Api api="POST https://api.pelm.com/auth/connect-token" apiComponents={
+  [
     {
-      "start": 1646996400,
-      "end": 1647000000,
-      "usage": 0.7526,
-      "ghg_emissions": 0.2925
+      type: 'ParamField',
+      attributes: [
+        {
+          name: 'header',
+          value: 'Pelm-Client-Id',
+        },
+        {
+          name: 'type',
+          value: 'string',
+        },
+        {
+          name: 'required',
+          value: true,
+        }
+      ]
     },
     {
-      "start": 1647000000,
-      "end": 1647003600,
-      "usage": 0.7536,
-      "ghg_emissions": 0.2325
+      type: 'ParamField',
+      attributes: [
+        {
+          name: 'header',
+          value: 'Pelm-Secret',
+        },
+        {
+          name: 'type',
+          value: 'string',
+        },
+        {
+          name: 'required',
+          value: true,
+        }
+      ]
+    },
+    {
+      type: 'ParamField',
+      attributes: [
+        {
+          name: 'body',
+          value: 'user_id',
+        },
+        {
+          name: 'type',
+          value: 'string',
+        },
+        {
+          name: 'required',
+          value: true,
+        },
+        {
+          name: 'default',
+          value: '123',
+        }
+      ]
     }
   ]
-}
-```
+}>
 
-Congratulations! You've successfully queried your user's usage intervals.
+</Api>
 
-## Requesting Bill Data
-
-To access bill data, first you need to figure out for which `Account` you want the data for. You should have gone through this in the previous step, so we won't repeat ourselves here.
-
-Next, you'll need to retrieve a list of bills for a given `Account` by making a GET request to `https://api.pelm.com/users/{ACCOUNT_ID}/bills`. The header structure should look familiar:
-
-- `Authorization` \= `Bearer {ACCESS_TOKEN}`
-- `Pelm-Client-Id` \= `{CLIENT_ID}`
-- `Pelm-Secret` \= `{CLIENT_SECRET}`
-
-```bash cURL
-curl https://api.pelm.com/{ACCOUNT_ID}/bills -H "Authorization: Bearer {ACCESS_TOKEN}" -H "Pelm-Client-Id: {CLIENT_ID}" -H "Pelm-Secret: {CLIENT_SECRET}"
-```
-
-You'll get a list of bill ids in the response, along with their start and end dates:
-
-```json JSON
+If you get a response that looks similar to this, then you're good to go.
+```json Response
 {
-  "577850911877": {
-    "bill_end_date": "Thu, 13 Jan 2022 08:00:00 GMT",
-    "bill_start_date": "Wed, 15 Dec 2021 08:00:00 GMT"
-  }
+  "connect_token": "CONNECT_TOKEN",
+  "expires_in": 1800
 }
 ```
+
+## Utility Credentials
+
+In order to test our API, you'll need access to a set of valid credentials for one of our [supported utilities](/reference/utilities). Alternatively, you can use our [Sandbox User](/reference/sandbox-user).
+
+
+## Core Concepts
+Review some of core concepts for a high-level understanding of our API.
+
+<Card title="Core Concepts" icon={duotone("link")} href="/core-concepts">
+</Card>
+
+## Let's write some code
+Now that you have a basic understanding of our core concepts, the next step is to integrate Pelm.
+
+If you're looking to start using Pelm in an existing application, follow the Connect Guide to embed our Connect component into your frontend and create your first `User`.
+
+If you want to get up and running ASAP, clone and follow along the ReadMe of our Quickstart Repo.
+
+<CardGroup cols={2}>
+  <Card title="Connect Guide" icon={duotone("square-1")} color="#ea5a0c" href="/connect-guide">
+    For integrating Connect into your existing application.
+  </Card>
+  <Card title="Quickstart Repo" icon={duotone("square-2")} color="#0285c7" href="https://github.com/Pelm-Technologies/quickstart">
+    If you prefer to learn by referencing example code or just want to get everything running locally ASAP.
+  </Card>
+</CardGroup>
