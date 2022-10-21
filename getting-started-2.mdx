@@ -6,16 +6,18 @@ import { Api } from "@/ui/Api";
 
 
 
-## Registering for Pelm
-TODO: update this
+## Client credentials
 
-To start using Pelm, first register at [pelm.com/register](https://www.pelm.com/register). Your **Company** will be displayed to users in Connect (more details later). Upon successful account creation, you'll receive an email with your `Pelm-Client-Id` and `Pelm-Secret`.
+The first step to accessing the Pelm API is obtaining your client credentials. Request credentials by visiting [pelm.com/schedule](https://www.pelm.com/schedule) or emailing [info@pelm.com](mailto:info@pelm.com).
 
 <Info>Your `Pelm-Client-Id` and `Pelm-Secret` will be essential for making requests to Pelm. Please keep these secret and in a safe place.</Info>
 
-If you need to update any of these fields or need help with anything else, email us at [info@pelm.com](mailto:info@pelm.com).
-
 ## Make your first request
+// TODO: make this work
+
+Let's do a quick sanity check to make sure your credentials are working properly.
+
+Fill in your credentials in the Header inputs below and then click "Send Request".
 
 Quick sanity check.
 
@@ -25,8 +27,25 @@ Quick sanity check.
       type: 'ParamField',
       attributes: [
         {
-          name: 'body',
-          value: 'user_id',
+          name: 'header',
+          value: 'Pelm-Client-Id',
+        },
+        {
+          name: 'type',
+          value: 'string',
+        },
+        {
+          name: 'required',
+          value: true,
+        }
+      ]
+    },
+    {
+      type: 'ParamField',
+      attributes: [
+        {
+          name: 'header',
+          value: 'Pelm-Secret',
         },
         {
           name: 'type',
@@ -43,28 +62,39 @@ Quick sanity check.
       attributes: [
         {
           name: 'body',
-          value: 'utility_id',
+          value: 'user_id',
         },
         {
           name: 'type',
           value: 'string',
+        },
+        {
+          name: 'required',
+          value: true,
+        },
+        {
+          name: 'default',
+          value: '123',
         }
       ]
-    },
+    }
   ]
 }>
 
 </Api>
 
-// TODO: show response
-
-If you get a `connect_token` back, then everything works fine and you're good to continue aoiwejfoiawjefoawef.
+If you get a response that looks similar to this, then you're good to go.
+```json Response
+{
+  "connect_token": "CONNECT_TOKEN",
+  "expires_in": 1800
+}
+```
 
 ## Utility Credentials
 
-In order to test our API, you'll need access to a set of valid credentials for one of our supported utilities. Alternatively, you can use our Sandbox User.
+In order to test our API, you'll need access to a set of valid credentials for one of our [supported utilities](/reference/utilities). Alternatively, you can use our [Sandbox User](/reference/sandbox-user).
 
-// TODO: link
 
 ## Core Concepts
 Review some of core concepts, which will help you make sense of our API.

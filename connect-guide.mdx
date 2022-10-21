@@ -2,25 +2,25 @@
 title: "Connect Guide"
 ---
 
-// TODO: include diagram here
+Connect is a UI component provded by Pelm that allows your users to seamlessly and securely connect their utility login.
+The end goal of Connect is to obtain an `access_token`, which grants you access to a particular `User`'s data.
 
-// TODO: include Connect overview
+The Connect flow consists of the following screens:
+1. Welcome Screen - User gains context on Pelm and Connect
+2. Utility Selection Screen - User selects their Utility
+3. Credentials Screen - User inputs their credentials
+4. MFA Screen - only shown for utilities that require multi-factor authentication
 
 
-{/* 
-One method of implementing Connect is by embedding it in your application, either via a script tag or the `react-pelm-connect` npm library. Here are the steps to achieving this:
-
-1. Embed Connect in your application
-2. Create a Connect token
-3. Open Connect
-4. User inputs utility credentials
-5. Retrieve an authorization code
-6. Exchange code for an access token
-*/}
+## Setting up Connect
+This guide will walk through the following steps to getting Connect set up in your app:
+1. Backend - Creating a `connect_token` to initialize Connect
+2. Frontend - Initializing and opening Connect
+3. Backend - Exchanging the `authorization_code` you obtained from Connect for an `access_token`
 
 ## 0. Install Connect
 
-TODO: link to npm library
+Either install our [React library](https://www.npmjs.com/package/react-pelm-connect) or add a `<script>` tag.
 
 <CodeGroup>
 
@@ -39,32 +39,14 @@ npm install react-pelm-connect
 
 The first step is creating a Connect token. This is an extra security measure that abstracts away information like your `Pelm-Secret` and `user_id` from the web client.
 
-// TODO: move this info to top
-
-
-You must include your own unique identifier for your user in the query parameters. This identifier is how you'll be able to associate responses from API endpoints with a particular user record stored in your records.
-
-
-
-Pelm will infer which flow (either **update** or **create**) your user will see based on the `user_id` you pass. In **create** mode, the user will see the following screens:
-
-- Terms of Service Screen (accepting terms of service)
-- Utility Selection Screen (selecting a utility)
-- Credentials Screen (entering utility credentials)
-
-In **update** mode, the user will start directly at the Utility Selection Screen.
-
-If you submit a new `user_id` for a user that has already connected their account with you, your previously submitted `user_id` will be overwritten by the new value. Make sure you change this appropriately in your records.
+You must include your own unique identifier for your user in the query parameters. This identifier is required to get `User` info or delete `User`s via our `/users` endpoints. 
 
 Include the optional `utility_id` parameter if you want your User to skip the Utility Selection Screen. You can find a list of `utility_id`s [here](/reference/utilities).
 
-// TODO: make sure links are correct
 To retrieve a `connect_token`, make a POST request to the [/auth/connect_token](https://pelm.readme.io/reference/post%5Fauth-connect-token) endpoint:
 
 <CodeGroup>
 ```js Node.js
-// TODO: make sure this code is correct
-
 import express from "express";
 import fetch from "node-fetch";
 
@@ -117,8 +99,6 @@ Pass your `connect_token` and callbacks to Connect via a config object.
 #### Open Connect
 
 Once you've created the config object, you can initialize Connect in a few ways.
-
-TODO: make sure these code snippets are correct
 
 <CodeGroup>
 
@@ -194,14 +174,11 @@ function App() {
 </CodeGroup>
 
 ## 3. Backend - exchange authorization_code for access_token
-The final step is exchanging the `authorization_code` you received in the previous step for an `access_token` via `POST /auth/token`. TODO: link to API reference
+The final step is exchanging the `authorization_code` you received in the previous step for an `access_token` via [`POST /auth/token`]().
 
-// TODO: refersh code snippets
 <CodeGroup>
 
 ```js Node
-// imports?
-
 app.post('/authorization', async (req, res) => {
 
   const headers = new Headers();
@@ -246,12 +223,37 @@ You should receive a response that looks like this.
 
 ## 4. Make your first request
 
-Note that even if you saee the 500 you're still good. You can verify this by making the same request with a different access token and verif.
+Now that you have your `access_token`, you can start making requests for your user's data. Request your `User`'s accounts via [GET /accounts](https://pelm.readme.io/reference/get%5Faccounts).
 
-// TODO: snippet for /accounts
-// TODO: show entire file examples
+<Info>This draws attention to important information</Info>
+
+This may return the following `500` response:
+
+```json
+{
+  "error_code": "data_unavailable",
+  "message": "We're currently loading data for this account, please try again in 5 minutes."
+}
+```
+
+Wait around one minute and try again.
+
+Note that receiving this response implies that you've successfully created an `access_token`. 
+You can verify this by making the same request with an invalid `access_token` and receiving a `credentials_invalid` response.
+
+## More Connect nuances
+Connect has two modes: `create` or `update`. 
+- `create` mode is used for creating new `User`s. Your user will screen all of the screens listed above.
+- `update` mode used to update existing `User`s that have changed their utility password. Your user will start the flow at the Credentials Screen.
+
+The flow is determined by the `user_id` value you pass when creating a `connect_token`.
+
+If you submit a new `user_id` for a user that has already connected their account with you, your previously submitted `user_id` will be overwritten by the new value. Make sure you change this appropriately in your records.
 
 
 ## Next steps
+Visit our API reference to view all the data you can request with your newly created `access_token`.
 
-Now that you have your `access_token`, you can start making requests for your user's data. Request your user's accounts via [/accounts](https://pelm.readme.io/reference/get%5Faccounts).
+<Card title="API Reference" icon={duotone("square-1")} color="#ea5a0c" href="/api-reference/overview">
+View all of our endpoints
+</Card>
