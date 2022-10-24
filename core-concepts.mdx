@@ -2,7 +2,9 @@
 title: "Core Concepts"
 ---
 
-## Core Objects
+## Data Model
+A few models you should know before getting started.
+
 #### User
 
 The `User` model corresponds to a utility login. If your user has multiple utility logins, such as an SCE login and a SoCalGas login, they must go through the [Connect](https://pelm.readme.io/reference/overview) flow multiple times. Each of these utility logins will be associated with a Pelm `User`, i.e. your user might be associated with multiple different Pelm `User`s.
@@ -20,7 +22,7 @@ Bob owns three houses in the Bay Area. PG&E serves gas and electricity for each 
 Alice rents an apartment in Southern California. SCE provides her electricity and SoCalGas provides her gas. Alice would need to go through the Connect flow twice. Alice is associated with two `User`s, each with one `Account`.
 
 ## Authorization
-Accessing user data.
+Securely access your users' data.
 
 #### Access Token
 The `access_token` grants you access to Alice's (and only Alice's) data. When making requests for Alice's data, the `access_token` must be passed in the `Authorization` header as `Bearer {{access_token}}`.

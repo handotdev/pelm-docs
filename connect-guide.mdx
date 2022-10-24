@@ -54,13 +54,12 @@ const app = express();
 const port = 3001
 
 app.post('/connect-token', (req, res, next) => {
-
   const headers = new Headers();
-  headers.set('Pelm-Client-Id', PELM_CLIENT_ID);
-  headers.set('Pelm-Secret', PELM_SECRET);
+  headers.set('Pelm-Client-Id', 'PELM_CLIENT_ID');  // Replace with your 'Pelm-Client-Id'
+  headers.set('Pelm-Secret', 'PELM_SECRET');  // Replace with your 'Pelm-Secret'
 
   const encodedParams = new URLSearchParams();
-  encodedParams.set('user_id', USER_ID);
+  encodedParams.set('user_id', 'USER_ID');  // Replace with your 'user_id'
 
   const requestOptions = {
     method: 'POST',
@@ -94,7 +93,10 @@ Pass your `connect_token` and callbacks to Connect via a config object.
 | onSuccess     | `(authorizationCode: string) => {}`     | Called when your User successfully connects their Utility login. |
 | onExit        | `(status: string, metadata: any) => {}` | Called when Connect is exited. |
 
-// TODO: somewhere that links to status
+The `onExit` `status` argument is safe for programatic use and can take one of the following values:
+- `user_initiated_exit`: the user closed Connect by clicking the "x" button or clicking outside the modal
+- `unavailable_utility_credentials_submitted`: the user submitted credentials for a utility that Pelm does not yet support
+
 
 #### Open Connect
 
@@ -252,6 +254,6 @@ If you submit a new `user_id` for a user that has already connected their accoun
 ## Next steps
 Visit our API reference to view all the data you can request with your newly created `access_token`.
 
-<Card title="API Reference" icon={duotone("square-1")} color="#ea5a0c" href="/api-reference/overview">
-View all of our endpoints
+<Card title="API Reference" icon={'rectangle-terminal'} href="/api-reference/overview">
+  Explore our endpoints
 </Card>

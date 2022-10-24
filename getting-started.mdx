@@ -17,7 +17,7 @@ The first step to accessing the Pelm API is obtaining your client credentials. R
 
 Let's do a quick sanity check to make sure your credentials are working properly. Fill in your credentials in the Header inputs below and then click "Send Request".
 
-<Api api="POST https://api.pelm.com/auth/connect-token" apiComponents={
+<Api api="POST https://api.pelm.com/auth/connect-token" contentType="multipart/form-data" apiComponents={
   [
     {
       type: 'ParamField',
@@ -67,10 +67,6 @@ Let's do a quick sanity check to make sure your credentials are working properly
         {
           name: 'required',
           value: true,
-        },
-        {
-          name: 'default',
-          value: '123',
         }
       ]
     }
@@ -93,9 +89,9 @@ In order to test the API, you'll need access to a set of valid credentials for o
 
 
 ## Core Concepts
-Review some of core concepts for a high-level understanding of our API.
+Review core concepts for a high-level understanding of our API.
 
-<Card title="Core Concepts" icon={duotone("link")} href="/core-concepts">
+<Card title="Core Concepts" icon={'book-bookmark'} href="/core-concepts">
 </Card>
 
 ## Let's write some code
@@ -103,13 +99,13 @@ Now that you have a basic understanding of our core concepts, the next step is t
 
 If you're looking to start using Pelm in an existing application, follow the Connect Guide to embed our Connect component into your frontend and create your first `User`.
 
-If you want to get up and running ASAP, clone and follow along the ReadMe of our Quickstart Repo.
+If you prefer to learn by referencing example code or just want to get everything running locally ASAP, clone our Quickstart Repo and follow its ReadMe.
 
 <CardGroup cols={2}>
-  <Card title="Connect Guide" icon={duotone("square-1")} color="#ea5a0c" href="/connect-guide">
-    For integrating Connect into your existing application.
+  <Card title="Connect Guide" icon={'book-open-cover'} href="/connect-guide">
+    Integrate Connect into your existing application
   </Card>
-  <Card title="Quickstart Repo" icon={duotone("square-2")} color="#0285c7" href="https://github.com/Pelm-Technologies/quickstart">
-    If you prefer to learn by referencing example code or just want to get everything running locally ASAP.
+  <Card title="Quickstart Repo" icon={'rocket'} href="https://github.com/Pelm-Technologies/quickstart">
+    Get Connect running locally and start making API requests ASAP
   </Card>
 </CardGroup>
